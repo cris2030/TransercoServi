@@ -1,0 +1,25 @@
+<div class="text-center mt-5">
+
+  <h1>
+    Control de Servicios
+  </h1>
+
+  <p class="mt-3">
+    Sistema de reportes para Transerco
+  </p>
+
+  <% if user_signed_in? %>
+
+    <%= link_to "Ir al Dashboard",
+        reports_path,
+        class: "btn btn-primary btn-lg" %>
+
+  <% else %>
+
+    <%= link_to "Iniciar sesión",
+        new_user_session_path,
+        class: "btn btn-success btn-lg" %>
+
+  <% end %>
+
+</div>

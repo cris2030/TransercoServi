@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Control de Servicios</title>
+    <%= favicon_link_tag "logo_transerco.png" %>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+      <div class="container">
+
+        <%= link_to root_path, class: "navbar-brand d-flex align-items-center gap-2 fw-semibold" do %>
+
+          <%= image_tag "logo_transerco.png",
+              alt: "Logo",
+              width: 38,
+              height: 38,
+              class: "rounded" %>
+
+          <span>
+            Control de Servicios
+          </span>
+
+        <% end %>
+
+        <div class="ms-auto d-flex align-items-center">
+            <div class="navbar-nav ms-4">
+
+              <%= link_to "Ubicaciones",
+                  locations_path,
+                  class: "nav-link" %>
+
+              <%= link_to "Reportes",
+                  reports_path,
+                  class: "nav-link" %>
+
+            </div>
+          <% if user_signed_in? %>
+
+            <span class="text-light me-3 small">
+              <%= current_user.email %>
+            </span>
+
+            <%= button_to "Salir",
+                destroy_user_session_path,
+                method: :delete,
+                class: "btn btn-danger btn-sm rounded-3" %>
+
+          <% end %>
+
+        </div>
+
+      </div>
+    </nav>
+
+    <div class="container mt-4">
+      <%= yield %>
+    </div>
+
+  </body>
+</html>

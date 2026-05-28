@@ -1,0 +1,134 @@
+<h1 class="mb-4">
+  Ubicación de Unidades
+</h1>
+
+<div class="card shadow-sm border-0">
+
+  <div class="card-body p-0">
+
+    <div class="table-responsive">
+
+      <table class="table table-hover table-striped align-middle mb-0">
+
+        <thead class="table-dark">
+          <tr>
+            <th>Unidad</th>
+            <th>Placas</th>
+            <th>Tipo</th>
+            <th>Ubicación</th>
+            <th>POI</th>
+            <th>Velocidad</th>
+            <th>GPS Status</th>
+            <th>Odómetro</th>
+            <th>Latitud</th>
+            <th>Longitud</th>
+            <th>Último reporte</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <% @locations[:CurrentLocations]&.each do |item| %>
+
+            <% unit_name = item[:UnitName].to_s.split("(").first.strip %>
+
+            <tr>
+
+              <td>
+                <strong>
+                  <%= unit_name %>
+                </strong>
+              </td>
+
+              <td>
+                <%= item[:Plates] %>
+              </td>
+
+              <td>
+                <span class="badge bg-secondary">
+                  <%= item[:UnitType] %>
+                </span>
+              </td>
+
+              <td>
+                <small>
+                  <%= item[:Municipality] %>,
+                  <%= item[:State] %>
+                </small>
+              </td>
+
+              <td>
+                <%= item[:NearestPoi] %>
+              </td>
+
+              <td>
+
+                <% if item[:Speed].to_i > 0 %>
+
+                  <span class="badge bg-primary">
+                    <%= item[:Speed] %> km/h
+                  </span>
+
+                <% else %>
+
+                  <span class="badge bg-secondary">
+                    Detenido
+                  </span>
+
+                <% end %>
+
+              </td>
+
+              <td>
+
+                <% if item[:Referenced] == false %>
+
+                  <span class="badge bg-success">
+                    Activo
+                  </span>
+
+                <% else %>
+
+                  <span class="badge bg-warning text-dark">
+                    Referenciado
+                  </span>
+
+                <% end %>
+
+              </td>
+
+              <td>
+                <%= number_with_delimiter(item[:GpsOdometer]) %> km
+              </td>
+
+              <td>
+                <small>
+                  <%= item[:Latitude] %>
+                </small>
+              </td>
+
+              <td>
+                <small>
+                  <%= item[:Longitude] %>
+                </small>
+              </td>
+
+              <td>
+                <small>
+                  <%= item[:TS] %>
+                </small>
+              </td>
+
+            </tr>
+
+          <% end %>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>

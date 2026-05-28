@@ -1,0 +1,22 @@
+@import "bootstrap";
+
+body {
+  background: linear-gradient(
+    135deg,
+    #f5f7fa 0%,
+    #e4e8f0 100%
+  );
+}
+
+.card {
+  backdrop-filter: blur(10px);
+}
+
+.form-control {
+  border: 1px solid #dfe3e8;
+}
+
+.form-control:focus {
+  box-shadow: none;
+  border-color: #212529;
+}

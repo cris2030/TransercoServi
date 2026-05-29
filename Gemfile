@@ -1,5 +1,5 @@
 source "https://rubygems.org"
-ruby "3.2.2"
+ruby "3.1.2"
 gem 'devise'
 gem 'simple_form'
 gem 'bootstrap', '~> 5.3'

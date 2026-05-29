@@ -349,7 +349,7 @@ DEPENDENCIES
   bootstrap (~> 5.3)
   brakeman
   capybara
-  cgi (>= 0.3.3)
+  cgi (= 0.5.1)
   debug
   devise
   dotenv-rails

@@ -5,7 +5,7 @@ gem 'simple_form'
 gem 'bootstrap', '~> 5.3'
 #gem 'sassc-rails'
 
-gem 'cgi', '>= 0.3.3'
+gem 'cgi', '0.5.1'
 # Consumir APIs
 gem 'faraday'
 gem 'faraday-follow_redirects'

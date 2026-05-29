@@ -3,7 +3,7 @@ ruby "3.1.2"
 gem 'devise'
 gem 'simple_form'
 gem 'bootstrap', '~> 5.3'
-gem 'sassc-rails'
+#gem 'sassc-rails'
 
 gem 'cgi', '>= 0.3.3'
 # Consumir APIs

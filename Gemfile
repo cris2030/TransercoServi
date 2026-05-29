@@ -2,8 +2,8 @@ source "https://rubygems.org"
 
 gem 'devise'
 gem 'simple_form'
-gem 'bootstrap', '~> 5.3'
-#gem 'sassc-rails'
+#gem "bootstrap", "~> 5.3"
+#gem "sassc-rails"
 
 # Consumir APIs
 gem 'faraday'
@@ -73,3 +73,5 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+gem "cssbundling-rails", "~> 1.4"

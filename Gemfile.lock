@@ -349,7 +349,6 @@ DEPENDENCIES
   bootstrap (~> 5.3)
   brakeman
   capybara
-  cgi (= 0.5.1)
   debug
   devise
   dotenv-rails
@@ -370,9 +369,6 @@ DEPENDENCIES
   turbo-rails
   tzinfo-data
   web-console
-
-RUBY VERSION
-   ruby 3.1.2p20
 
 BUNDLED WITH
    2.6.9

@@ -1,11 +1,10 @@
 source "https://rubygems.org"
-ruby "3.1.2"
+
 gem 'devise'
 gem 'simple_form'
 gem 'bootstrap', '~> 5.3'
 #gem 'sassc-rails'
 
-gem 'cgi', '0.5.1'
 # Consumir APIs
 gem 'faraday'
 gem 'faraday-follow_redirects'

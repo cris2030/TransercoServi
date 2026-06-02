@@ -7,6 +7,7 @@ class LinkerApi
     @password = ENV["LINKER_PASSWORD"]
 
     @connection = Faraday.new(
+      ssl: { verify: false },
       headers: {
         "Content-Type" => "application/json",
         "Accept" => "application/json"
@@ -58,15 +59,35 @@ class LinkerApi
 
   def current_odometers
     response = @connection.post(
-      "#{BASE_URL}/Odometer.svc/restService/GetCurrentOdometers"
+      "#{BASE_URL}/Odometer.svc/restService/CurrentOdometers"
     ) do |req|
       req.body = {
-        Configuration: ENV["LINKER_CONFIGURATION"],
-        Session: session_data
+        Session: session_data,
+        Configuration: ENV["LINKER_CONFIGURATION"]
       }.to_json
     end
 
     JSON.parse(response.body, symbolize_names: true)
   end
+
+  def odometros_por_unidad
+
+    response = current_odometers
+
+    return {} unless response[:Result] == "OK"
+
+    odometers = response[:OdometersInfo] || []
+
+    odometers.each_with_object({}) do |item, hash|
+
+      next unless item[:UnitID]
+
+      hash[item[:UnitID].to_s] =
+        item[:OdometerGps].to_f
+
+    end
+
+  end
+  
 
 end

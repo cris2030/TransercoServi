@@ -1,5 +1,19 @@
 Rails.application.routes.draw do
+  resources :unidades
+  resources :metas
+  resources :servicios
+  resources :asignacion_metas
+
+  get  "control_servicios", to: "control_servicios#index"
+  post "unidades/sincronizar", to: "unidades#sincronizar", as: :sincronizar_unidades
+
+  post "control_servicios/actualizar",
+       to: "control_servicios#actualizar",
+       as: :actualizar_control_servicios
+
+  resources :odometers, only: [:index]
   resources :locations, only: [:index]
+
 
   root "home#index"
   resources :reports, only: [:index]

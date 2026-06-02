@@ -1,0 +1,97 @@
+<% content_for :title, "Servicios" %>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+
+  <h2 class="fw-semibold mb-0">
+    Servicios
+  </h2>
+
+  <%= link_to "Nuevo Servicio", new_servicio_path, class: "btn btn-primary" %>
+
+</div>
+
+<% if notice.present? %>
+  <div class="alert alert-success py-2">
+    <%= notice %>
+  </div>
+<% end %>
+
+<div class="card shadow-sm border-0">
+
+  <div class="table-responsive">
+
+    <table class="table table-hover align-middle mb-0">
+
+      <thead class="table-dark">
+
+        <tr>
+          <th>Unidad</th>
+          <th>Kilometraje</th>
+          <th>Fecha</th>
+          <th>Mecánico</th>
+          <th style="width:180px;">Acciones</th>
+        </tr>
+
+      </thead>
+
+      <tbody>
+
+        <% @servicios.each do |servicio| %>
+
+          <tr>
+
+            <td class="fw-semibold">
+              <%= servicio.unidad&.codigo %>
+              <br>
+              <small class="text-muted">
+                <%= servicio.unidad&.placa %>
+              </small>
+            </td>
+
+            <td>
+              <span class="badge bg-dark">
+                <%= number_with_delimiter(servicio.kilometraje) %> km
+              </span>
+            </td>
+
+            <td>
+              <%= servicio.fecha %>
+            </td>
+
+            <td>
+              <%= servicio.nom_mecanico %>
+            </td>
+
+            <td>
+
+              <div class="d-flex gap-2">
+
+                <%= link_to "Ver",
+                    servicio,
+                    class: "btn btn-sm btn-outline-primary" %>
+
+                <%= link_to "Editar",
+                    edit_servicio_path(servicio),
+                    class: "btn btn-sm btn-outline-warning" %>
+
+                <%= button_to "Eliminar",
+                    servicio,
+                    method: :delete,
+                    class: "btn btn-sm btn-outline-danger",
+                    form: { data: { turbo_confirm: "¿Eliminar servicio?" } } %>
+
+              </div>
+
+            </td>
+
+          </tr>
+
+        <% end %>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>

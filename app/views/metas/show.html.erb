@@ -1,0 +1,52 @@
+<div class="card shadow-sm border-0">
+
+  <div class="card-header text-white"
+       style="background-color:<%= @meta.color %>">
+
+    <h4 class="mb-0">
+      <%= @meta.nombre %>
+    </h4>
+
+  </div>
+
+  <div class="card-body">
+
+    <p>
+      <strong>Kilometraje inicio:</strong>
+      <%= @meta.kilometraje_inicio %>
+    </p>
+
+    <p>
+      <strong>Kilometraje final:</strong>
+      <%= @meta.kilometraje_final %>
+    </p>
+
+    <p>
+      <strong>Nivel:</strong>
+      <%= @meta.nivel_imp %>
+    </p>
+
+    <p>
+      <strong>Color:</strong>
+      <span style="background:<%= @meta.color %>;padding:5px 15px;border-radius:5px;color:#fff;">
+        <%= @meta.color %>
+      </span>
+    </p>
+
+  </div>
+
+</div>
+
+<div class="mt-3 d-flex gap-2">
+
+  <%= link_to "Editar", edit_meta_path(@meta), class: "btn btn-warning" %>
+
+  <%= link_to "Volver", metas_path, class: "btn btn-secondary" %>
+
+  <%= button_to "Eliminar",
+      @meta,
+      method: :delete,
+      class: "btn btn-danger",
+      data: { confirm: "¿Seguro?" } %>
+
+</div>

@@ -1,0 +1,88 @@
+<% content_for :title, "Unidades" %>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+
+  <h2 class="fw-semibold mb-0">
+    Unidades
+  </h2>
+
+  <%= link_to "Nueva Unidad", new_unidad_path, class: "btn btn-primary" %>
+
+</div>
+
+<% if notice.present? %>
+  <div class="alert alert-success py-2">
+    <%= notice %>
+  </div>
+<% end %>
+
+<div class="card shadow-sm border-0">
+
+  <div class="table-responsive">
+
+    <table class="table table-hover align-middle mb-0">
+
+      <thead class="table-dark">
+
+        <tr>
+          <th>Código</th>
+          <th>Placa</th>
+          <th>Unidad ID</th>
+          <th style="width:180px;">Acciones</th>
+        </tr>
+
+      </thead>
+
+      <tbody>
+
+        <% @unidades.each do |unidad| %>
+
+          <tr>
+
+            <td class="fw-semibold">
+              <%= unidad.codigo %>
+            </td>
+
+            <td>
+              <span class="badge bg-secondary">
+                <%= unidad.placa %>
+              </span>
+            </td>
+
+            <td class="text-muted">
+              <%= unidad.unitID %>
+            </td>
+
+            <td>
+
+              <div class="d-flex gap-2">
+
+                <%= link_to "Ver",
+                    unidad,
+                    class: "btn btn-sm btn-outline-primary" %>
+
+                <%= link_to "Editar",
+                    edit_unidad_path(unidad),
+                    class: "btn btn-sm btn-outline-warning" %>
+
+                <%= button_to "Eliminar",
+                    unidad,
+                    method: :delete,
+                    class: "btn btn-sm btn-outline-danger",
+                    form: { data: { turbo_confirm: "¿Eliminar unidad?" } } %>
+
+              </div>
+
+            </td>
+
+          </tr>
+
+        <% end %>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>

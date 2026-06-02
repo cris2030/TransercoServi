@@ -1,0 +1,12 @@
+<% content_for :title, "Editing meta" %>
+
+<h1>Editing meta</h1>
+
+<%= render "form", meta: @meta %>
+
+<br>
+
+<div>
+  <%= link_to "Show this meta", @meta %> |
+  <%= link_to "Back to metas", metas_path %>
+</div>

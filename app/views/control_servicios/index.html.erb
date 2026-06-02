@@ -1,0 +1,65 @@
+<h1>Control Servicios</h1>
+
+<%= button_to "Actualizar Datos",
+              actualizar_control_servicios_path,
+              method: :post,
+              class: "btn btn-primary mb-3" %>
+
+<table class="table table-bordered">
+
+  <thead>
+    <tr>
+      <th>Unidad</th>
+      <th>Placa</th>
+      <th>Último Servicio</th>
+      <th>Km desde último servicio</th>
+      <th>Meta</th>
+    </tr>
+  </thead>
+
+  <tbody>
+
+<% @control_servicios.each do |fila| %>
+
+  <% color_fila = nil %>
+
+  <% if fila[:meta_actual].present? &&
+        fila[:km_desde_servicio] >= fila[:meta_actual].kilometraje_inicio &&
+        fila[:km_desde_servicio] <= fila[:meta_actual].kilometraje_final %>
+
+    <% color_fila = fila[:meta_actual].color %>
+    <% color = fila[:meta_actual].color %>
+
+  <% end %>
+
+  <tr style="background-color:<%= fila[:meta_actual]&.color %>">
+
+    <td><%= fila[:unidad].codigo %></td>
+
+    <td><%= fila[:placa] %></td>
+
+    <td><%= fila[:fecha_ultimo_servicio] %></td>
+
+  <td style="background-color:<%= color %>">
+    <%= number_with_precision(
+          fila[:km_desde_servicio],
+          precision: 0,
+          delimiter: ","
+        ) %>
+  </td>
+
+    <td>
+      <%= number_with_precision(
+            fila[:meta_actual]&.kilometraje_inicio,
+            precision: 0,
+            delimiter: ","
+          ) %>
+    </td>
+
+  </tr>
+
+<% end %>
+
+  </tbody>
+
+</table>

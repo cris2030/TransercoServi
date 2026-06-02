@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  unidad: one
+  kilometraje: 1
+  fecha: 2026-06-01
+  nom_mecanico: MyString
+
+two:
+  unidad: two
+  kilometraje: 1
+  fecha: 2026-06-01
+  nom_mecanico: MyString

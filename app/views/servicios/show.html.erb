@@ -1,0 +1,119 @@
+<% content_for :title, "Servicio" %>
+
+<% if notice.present? %>
+  <div class="alert alert-success py-2">
+    <%= notice %>
+  </div>
+<% end %>
+
+<div class="card shadow-sm border-0">
+
+  <!-- HEADER -->
+  <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+
+    <div>
+      <h5 class="mb-0">
+        Servicio de Unidad <%= @servicio.unidad&.codigo %>
+      </h5>
+
+      <small>
+        Placa: <%= @servicio.unidad&.placa %>
+      </small>
+    </div>
+
+    <span class="badge bg-light text-dark">
+      <%= @servicio.fecha %>
+    </span>
+
+  </div>
+
+  <!-- BODY -->
+  <div class="card-body">
+
+    <div class="row g-3">
+
+      <!-- DETALLES -->
+      <div class="col-md-6">
+
+        <div class="p-3 border rounded bg-light h-100">
+
+          <h6 class="text-muted mb-3">Detalles del Servicio</h6>
+
+          <p class="mb-2">
+            <strong>Kilometraje:</strong>
+            <span class="badge bg-dark">
+              <%= number_with_delimiter(@servicio.kilometraje) %> km
+            </span>
+          </p>
+
+          <p class="mb-2">
+            <strong>Fecha:</strong>
+            <%= @servicio.fecha %>
+          </p>
+
+          <p class="mb-0">
+            <strong>Mecánico:</strong>
+            <%= @servicio.nom_mecanico %>
+          </p>
+
+        </div>
+
+      </div>
+
+      <!-- UNIDAD -->
+      <div class="col-md-6">
+
+        <div class="p-3 border rounded bg-light h-100">
+
+          <h6 class="text-muted mb-3">Unidad Asociada</h6>
+
+          <% if @servicio.unidad.present? %>
+
+            <p class="mb-2">
+              <strong>Código:</strong> <%= @servicio.unidad.codigo %>
+            </p>
+
+            <p class="mb-2">
+              <strong>Placa:</strong> <%= @servicio.unidad.placa %>
+            </p>
+
+            <p class="mb-0">
+              <strong>Unit ID:</strong> <%= @servicio.unidad.unitID %>
+            </p>
+
+          <% else %>
+
+            <div class="alert alert-warning mb-0">
+              Este servicio no tiene unidad asociada
+            </div>
+
+          <% end %>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ACCIONES -->
+<div class="mt-3 d-flex gap-2">
+
+  <%= link_to "Editar",
+      edit_servicio_path(@servicio),
+      class: "btn btn-warning" %>
+
+  <%= link_to "Volver",
+      servicios_path,
+      class: "btn btn-secondary" %>
+
+  <%= button_to "Eliminar",
+      @servicio,
+      method: :delete,
+      class: "btn btn-danger",
+      form: { data: { turbo_confirm: "¿Seguro que deseas eliminar este servicio?" } } %>
+
+</div>

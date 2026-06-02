@@ -8,6 +8,11 @@
 #   inflect.singular /^(ox)en/i, "\\1"
    inflect.irregular "person", "people"
    inflect.irregular "locacion", "locaciones"
+   inflect.irregular "unidad", "unidades"
+   inflect.irregular "meta", "metas"
+   inflect.irregular "asignacion_meta", "asignacion_metas"
+   inflect.irregular "servicio", "servicios"
+
 #   inflect.uncountable %w( fish sheep )
  end
 

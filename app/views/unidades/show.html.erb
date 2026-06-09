@@ -60,32 +60,44 @@
 
         <div class="p-3 border rounded bg-light h-100">
 
-          <h6 class="text-muted mb-3">Meta Asignada</h6>
+        <h6 class="text-muted mb-3">Metas Asignadas</h6>
 
-          <% if @unidad.meta.present? %>
+        <% if @unidad.metas.any? %>
 
-            <span class="badge mb-2"
-                  style="background-color:<%= @unidad.meta.color %>; color:#fff;">
-              <%= @unidad.meta.nombre %>
-            </span>
+          <% @unidad.metas.order(:nivel_imp).each do |meta| %>
 
-            <p class="mb-1">
-              <strong>Inicio:</strong>
-              <%= @unidad.meta.kilometraje_inicio %> km
-            </p>
+            <div class="mb-3">
 
-            <p class="mb-0">
-              <strong>Final:</strong>
-              <%= @unidad.meta.kilometraje_final %> km
-            </p>
+              <span class="badge"
+                    style="background-color:<%= meta.color %>; color:white;">
+                <%= meta.nombre %> - Nivel <%= meta.nivel_imp %>
+              </span>
 
-          <% else %>
+              <p class="mb-1">
+                <strong>Inicio:</strong>
+                <%= number_with_precision(meta.kilometraje_inicio,
+                                          precision: 0,
+                                          delimiter: ",") %> km
+              </p>
 
-            <div class="alert alert-warning mb-0">
-              Esta unidad no tiene meta asignada
+              <p class="mb-0">
+                <strong>Final:</strong>
+                <%= number_with_precision(meta.kilometraje_final,
+                                          precision: 0,
+                                          delimiter: ",") %> km
+              </p>
+
             </div>
 
           <% end %>
+
+        <% else %>
+
+          <div class="alert alert-warning mb-0">
+            Esta unidad no tiene metas asignadas
+          </div>
+
+        <% end %>
 
         </div>
 

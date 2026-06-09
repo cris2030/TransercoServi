@@ -22,7 +22,7 @@
 
           <% @odometers[:OdometersInfo]&.each do |item| %>
 
-            <% unit_name = item[:UnitName].to_s.split("(").first.strip %>
+            <% unit_name = item[:UnitName]%>
 
             <tr>
 

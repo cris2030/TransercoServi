@@ -1,14 +1,113 @@
+<%= simple_form_for(@asignacion_meta, url: asignacion_meta_path(@meta), method: :patch) do |f| %>
 
-<%= simple_form_for(@asignacion_meta) do |f| %>
   <%= f.error_notification %>
-  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
 
-  <div class="form-inputs">
-    <%= f.association :unidad %>
-    <%= f.association :meta %>
+  <% if flash[:alert] %>
+    <div class="alert alert-danger">
+      <%= flash[:alert] %>
+    </div>
+  <% end %>
+
+  <%= f.input :meta_id,
+            collection: Meta.order(:nombre).map { |m|
+              [
+                "#{m.nombre} (cada #{m.cantidad_meta} km)",
+                m.id
+              ]
+            },
+            label: "Meta",
+            prompt: "Seleccione una meta" %>
+
+  <hr>
+
+  <div class="mb-3">
+
+    <div class="form-check mb-3">
+
+      <input type="checkbox"
+             id="seleccionar_todas"
+             class="form-check-input">
+
+      <label for="seleccionar_todas"
+             class="form-check-label">
+
+        Seleccionar todas las unidades
+
+      </label>
+
+    </div>
+
+    <input type="text"
+           id="buscar_unidad"
+           class="form-control mb-3"
+           placeholder="Buscar unidad...">
+
+    <div id="lista_unidades"
+         class="border rounded p-3"
+         style="max-height:400px;overflow-y:auto;">
+
+      <% Unidad.order(:codigo).each do |unidad| %>
+
+        <% marcada =
+             defined?(@meta) ?
+             @meta.unidad_ids.include?(unidad.id) :
+             false %>
+
+        <div class="form-check unidad-item">
+
+          <%= check_box_tag(
+                "unidad_ids[]",
+                unidad.id,
+                marcada,
+                class: "form-check-input unidad-checkbox",
+                id: "unidad_#{unidad.id}"
+              ) %>
+
+          <%= label_tag(
+                "unidad_#{unidad.id}",
+                "#{unidad.codigo} - #{unidad.placa}",
+                class: "form-check-label"
+              ) %>
+
+        </div>
+
+      <% end %>
+
+    </div>
+
   </div>
 
-  <div class="form-actions">
-    <%= f.button :submit %>
-  </div>
+  <%= f.button :submit %>
+
 <% end %>
+
+ <script>
+  document.addEventListener("turbo:load", function() {
+
+    const buscador = document.getElementById("buscar_unidad");
+    const seleccionarTodas = document.getElementById("seleccionar_todas");
+
+    if (buscador) {
+      buscador.addEventListener("input", function() {
+        const texto = this.value.toLowerCase();
+
+        document.querySelectorAll(".unidad-item").forEach(function(item) {
+          const contenido = item.textContent.toLowerCase();
+
+          item.style.display = contenido.includes(texto)
+            ? ""
+            : "none";
+        });
+      });
+    }
+
+    if (seleccionarTodas) {
+      seleccionarTodas.addEventListener("change", function() {
+        document.querySelectorAll(".unidad-checkbox").forEach(function(check) {
+          check.checked = seleccionarTodas.checked;
+        });
+      });
+    }
+
+  });
+</script>

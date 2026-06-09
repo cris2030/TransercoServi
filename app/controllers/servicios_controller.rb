@@ -12,7 +12,12 @@ class ServiciosController < ApplicationController
 
   # GET /servicios/new
   def new
-    @servicio = Servicio.new
+    @servicio = Servicio.new(
+      unidad_id: params[:unidad_id],
+      kilometraje: params[:kilometraje]
+    )
+
+    @return_to = params[:return_to]
   end
 
   # GET /servicios/1/edit
@@ -25,11 +30,36 @@ class ServiciosController < ApplicationController
 
     respond_to do |format|
       if @servicio.save
-        format.html { redirect_to @servicio, notice: "Servicio was successfully created." }
-        format.json { render :show, status: :created, location: @servicio }
+
+        destino =
+          params[:return_to].presence ||
+          control_servicios_path
+
+        format.html do
+          redirect_to destino,
+                      notice: "Servicio creado correctamente."
+        end
+
+        format.json do
+          render :show,
+                status: :created,
+                location: @servicio
+        end
+
       else
-        format.html { render :new, status: :unprocessable_content }
-        format.json { render json: @servicio.errors, status: :unprocessable_content }
+
+        @return_to = params[:return_to]
+
+        format.html do
+          render :new,
+                status: :unprocessable_content
+        end
+
+        format.json do
+          render json: @servicio.errors,
+                status: :unprocessable_content
+        end
+
       end
     end
   end

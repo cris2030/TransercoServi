@@ -65,12 +65,12 @@
                     edit_unidad_path(unidad),
                     class: "btn btn-sm btn-outline-warning" %>
 
-                <%= button_to "Eliminar",
-                    unidad,
-                    method: :delete,
-                    class: "btn btn-sm btn-outline-danger",
-                    form: { data: { turbo_confirm: "¿Eliminar unidad?" } } %>
-
+              <%= button_to "Eliminar",
+                  unidad,
+                  method: :delete,
+                  data: { turbo_confirm: "¿Eliminar unidad?" },
+                  class: "btn btn-sm btn-outline-danger" %>
+                    
               </div>
 
             </td>

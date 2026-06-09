@@ -5,10 +5,25 @@
 
   <div class="form-inputs">
     <%= f.input :nombre %>
-    <%= f.input :kilometraje_inicio %>
-    <%= f.input :kilometraje_final %>
-    <%= f.input :color %>
-    <%= f.input :nivel_imp %>
+    <%= f.input :cantidad_meta,
+            label: "Cantidad Meta (Km)" %>
+
+    <%= f.input :alerta_km,
+                label: "Alertar cuando falten (Km)" %>
+
+    <%= f.input :urgente_km,
+                label: "Entrar en urgente cuando supere (Km)" %>
+
+    <%= f.input :color,
+            collection: [
+              ['Rojo', 'red'],
+              ['Amarillo', 'yellow'],
+              ['Verde', 'green'],
+              ['Naranja', 'orange'],
+              ['Morado', 'purple']
+            ],
+            prompt: "Seleccione un color" %>
+
   </div>
 
   <div class="form-actions">

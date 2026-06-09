@@ -5,61 +5,155 @@
               method: :post,
               class: "btn btn-primary mb-3" %>
 
-<table class="table table-bordered">
+<div class="tabla-control-servicios">
+  <table class="table table-bordered table-hover align-middle">
 
-  <thead>
-    <tr>
-      <th>Unidad</th>
-      <th>Placa</th>
-      <th>Último Servicio</th>
-      <th>Km desde último servicio</th>
-      <th>Meta</th>
-    </tr>
-  </thead>
+    <thead class="table-dark">
+      <tr>
+        <th>Unidad</th>
+        <th>Último Servicio</th>
+        <th>Días Recorridos</th>
+        <th>Km Recorridos</th>
+        <th>Meta</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
 
-  <tbody>
+    <tbody>
 
-<% @control_servicios.each do |fila| %>
+      <% @control_servicios.each do |fila| %>
 
-  <% color_fila = nil %>
+        <%
+          color_fila =
+            case fila[:estado]
 
-  <% if fila[:meta_actual].present? &&
-        fila[:km_desde_servicio] >= fila[:meta_actual].kilometraje_inicio &&
-        fila[:km_desde_servicio] <= fila[:meta_actual].kilometraje_final %>
+            when :urgente
+              "#f8d7da"
 
-    <% color_fila = fila[:meta_actual].color %>
-    <% color = fila[:meta_actual].color %>
+            when :alerta
+              "#fff3cd"
 
-  <% end %>
+            when :cumplido
 
-  <tr style="background-color:<%= fila[:meta_actual]&.color %>">
+              case fila[:meta_actual]&.color
+              when "red"
+                "#f8d7da"
+              when "yellow"
+                "#fff3cd"
+              when "green"
+                "#d1e7dd"
+              when "orange"
+                "#ffe5b4"
+              when "purple"
+                "#e2d9f3"
+              else
+                "#d1e7dd"
+              end
 
-    <td><%= fila[:unidad].codigo %></td>
+            else
+              ""
+            end
+        %>
 
-    <td><%= fila[:placa] %></td>
+        <tr style="background-color:<%= color_fila %>">
 
-    <td><%= fila[:fecha_ultimo_servicio] %></td>
+          <td>
+            <strong><%= fila[:unidad].codigo %></strong>
+          </td>
 
-  <td style="background-color:<%= color %>">
-    <%= number_with_precision(
-          fila[:km_desde_servicio],
-          precision: 0,
-          delimiter: ","
-        ) %>
-  </td>
+          <td>
+            <%= fila[:fecha_ultimo_servicio]&.strftime("%d/%m/%Y") || "-" %>
+          </td>
 
-    <td>
-      <%= number_with_precision(
-            fila[:meta_actual]&.kilometraje_inicio,
-            precision: 0,
-            delimiter: ","
-          ) %>
-    </td>
+          <td>
+            <%= fila[:dias_recorridos] %>
+          </td>
 
-  </tr>
+          <td>
+            <%= number_with_precision(
+                  fila[:km_desde_servicio],
+                  precision: 0,
+                  delimiter: ","
+                ) %>
+          </td>
 
-<% end %>
+          <td>
 
-  </tbody>
+            <% if fila[:meta_actual] %>
 
-</table>
+              <span class="badge"
+                    style="background-color:<%= fila[:meta_actual].color %>;">
+
+                <%= fila[:meta_actual].nombre %>
+
+              </span>
+
+              <small class="d-block text-muted">
+
+                <%= number_with_precision(
+                      fila[:meta_actual].cantidad_meta,
+                      precision: 0,
+                      delimiter: ","
+                    ) %> km
+
+              </small>
+
+            <% else %>
+
+              <span class="badge bg-secondary">
+                Sin Meta
+              </span>
+
+            <% end %>
+
+          </td>
+
+          <td>
+
+            <% if fila[:estado] == :urgente %>
+
+              <span class="badge bg-danger">
+                URGENTE
+              </span>
+
+            <% elsif fila[:estado] == :alerta %>
+
+              <span class="badge bg-warning text-dark">
+                ALERTA
+              </span>
+
+            <% elsif fila[:estado] == :cumplido %>
+
+              <span class="badge"
+                    style="background-color:<%= fila[:meta_actual].color %>;
+                          color:white;">
+
+                CUMPLIDO
+
+              </span>
+
+            <% end %>
+
+          </td>
+
+          <td>
+
+            <%= link_to "Registrar Servicio",
+                new_servicio_path(
+                  unidad_id: fila[:unidad].id,
+                  kilometraje: fila[:odometro_actual],
+                  return_to: request.fullpath
+                ),
+                class: "btn btn-primary btn-sm" %>
+
+          </td>
+
+        </tr>
+
+      <% end %>
+
+    </tbody>
+
+  </table>
+</div>

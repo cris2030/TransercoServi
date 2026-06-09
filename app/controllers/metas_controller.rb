@@ -65,6 +65,12 @@ class MetasController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def meta_params
-      params.require(:meta).permit(:nombre, :kilometraje_inicio, :kilometraje_final, :color, :nivel_imp)
+      params.require(:meta).permit(
+        :nombre,
+        :cantidad_meta,
+        :alerta_km,
+        :urgente_km,
+        :color
+      )
     end
 end

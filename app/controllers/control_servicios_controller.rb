@@ -23,10 +23,28 @@ class ControlServiciosController < ApplicationController
       .includes(:metas, :servicios)
       .map do |unidad|
 
-        ultimo_servicio =
-          unidad.servicios
-                .order(fecha: :desc)
-                .first
+      ultimo_servicio =
+        unidad.servicios
+              .order(fecha: :desc)
+              .first
+
+      fecha_ultimo_servicio =
+        ultimo_servicio&.fecha
+
+      dias_recorridos =
+        if fecha_ultimo_servicio.present?
+
+          total_dias =
+            (Date.current - fecha_ultimo_servicio.to_date).to_i
+
+          meses = total_dias / 30
+          dias  = total_dias % 30
+
+          "#{meses}m-#{dias}d"
+
+        else
+          "-"
+      end
 
         km_servicio =
           ultimo_servicio&.kilometraje.to_i
@@ -37,35 +55,55 @@ class ControlServiciosController < ApplicationController
         km_desde_servicio =
           odometro_actual - km_servicio
 
-        metas_en_rango =
-          unidad.metas
-                .where(
-                  "? BETWEEN kilometraje_inicio AND kilometraje_final",
-                  km_desde_servicio
-                )
-
         meta_actual =
-          metas_en_rango.order(:nivel_imp).first ||
-          unidad.metas.order(:nivel_imp).first
-          
+            unidad.metas.min_by do |meta|
+            meta.cantidad_meta
+        end
+          estado =
+          meta_actual&.estado(km_desde_servicio)
+
+          km_restantes =
+  meta_actual&.km_restantes(km_desde_servicio)
         
       {
         unidad: unidad,
-        placa: unidad.placa,
         fecha_ultimo_servicio: ultimo_servicio&.fecha,
+        dias_recorridos: dias_recorridos,
         km_desde_servicio: km_desde_servicio,
-        meta_actual: meta_actual
+        odometro_actual: odometro_actual,
+        meta_actual: meta_actual,
+        estado: estado,
+        km_restantes: km_restantes
       }
       end
       
 
-    @control_servicios = @control_servicios.sort_by do |fila|
-      [
-        fila[:meta_actual]&.nivel_imp || 999,
-        -fila[:km_desde_servicio]
-      ]
-    end
+      @control_servicios =
+        @control_servicios.sort_by do |fila|
 
-  end
+          prioridad =
+            case fila[:estado]
+
+            when :urgente
+              0
+
+            when :cumplido
+              1
+
+            when :alerta
+              2
+
+            else
+              3
+
+            end
+
+          [
+            prioridad,
+            fila[:km_restantes] || 999999
+          ]
+        end
+
+      end
 
 end

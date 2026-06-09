@@ -12,24 +12,27 @@
   <div class="card-body">
 
     <p>
-      <strong>Kilometraje inicio:</strong>
-      <%= @meta.kilometraje_inicio %>
+      <strong>Cantidad Meta:</strong>
+      <%= @meta.cantidad_meta %> Km
     </p>
 
     <p>
-      <strong>Kilometraje final:</strong>
-      <%= @meta.kilometraje_final %>
+      <strong>Alertar cuando falten:</strong>
+      <%= @meta.alerta_km %> Km
     </p>
 
     <p>
-      <strong>Nivel:</strong>
-      <%= @meta.nivel_imp %>
+      <strong>Urgente cuando supere:</strong>
+      <%= @meta.urgente_km %> Km
     </p>
 
     <p>
       <strong>Color:</strong>
-      <span style="background:<%= @meta.color %>;padding:5px 15px;border-radius:5px;color:#fff;">
-        <%= @meta.color %>
+
+      <span
+        class="badge"
+        style="background-color:<%= @meta.color %>; color:white;">
+        <%= @meta.color.capitalize %>
       </span>
     </p>
 
@@ -39,14 +42,22 @@
 
 <div class="mt-3 d-flex gap-2">
 
-  <%= link_to "Editar", edit_meta_path(@meta), class: "btn btn-warning" %>
+  <%= link_to "Editar",
+      edit_meta_path(@meta),
+      class: "btn btn-warning" %>
 
-  <%= link_to "Volver", metas_path, class: "btn btn-secondary" %>
+  <%= link_to "Volver",
+      metas_path,
+      class: "btn btn-secondary" %>
 
   <%= button_to "Eliminar",
-      @meta,
+      meta_path(@meta),
       method: :delete,
       class: "btn btn-danger",
-      data: { confirm: "¿Seguro?" } %>
+      form: {
+        data: {
+          turbo_confirm: "¿Está seguro de eliminar esta meta?"
+        }
+      } %>
 
 </div>

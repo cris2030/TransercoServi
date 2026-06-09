@@ -1,70 +1,83 @@
 class AsignacionMetasController < ApplicationController
-  before_action :set_asignacion_meta, only: %i[ show edit update destroy ]
+  before_action :set_asignacion_meta, only: %i[show destroy]
 
-  # GET /asignacion_metas or /asignacion_metas.json
   def index
-    @asignacion_metas = AsignacionMeta.all
+    @metas = Meta.includes(:unidades)
   end
 
-  # GET /asignacion_metas/1 or /asignacion_metas/1.json
   def show
   end
 
-  # GET /asignacion_metas/new
   def new
     @asignacion_meta = AsignacionMeta.new
   end
 
-  # GET /asignacion_metas/1/edit
   def edit
+    @meta = Meta.includes(:unidades).find(params[:id])
+
+    @asignacion_meta = AsignacionMeta.new
+    @asignacion_meta.meta_id = @meta.id
   end
 
-  # POST /asignacion_metas or /asignacion_metas.json
   def create
-    @asignacion_meta = AsignacionMeta.new(asignacion_meta_params)
+    meta_id = params.dig(:asignacion_meta, :meta_id)
+    unidad_ids = params[:unidad_ids] || []
 
-    respond_to do |format|
-      if @asignacion_meta.save
-        format.html { redirect_to @asignacion_meta, notice: "Asignacion meta was successfully created." }
-        format.json { render :show, status: :created, location: @asignacion_meta }
-      else
-        format.html { render :new, status: :unprocessable_content }
-        format.json { render json: @asignacion_meta.errors, status: :unprocessable_content }
-      end
+    if meta_id.blank?
+      flash.now[:alert] = "Debe seleccionar una meta"
+      @asignacion_meta = AsignacionMeta.new
+      render :new, status: :unprocessable_entity
+      return
     end
+
+    if unidad_ids.blank?
+      flash.now[:alert] = "Debe seleccionar al menos una unidad"
+      @asignacion_meta = AsignacionMeta.new(meta_id: meta_id)
+      render :new, status: :unprocessable_entity
+      return
+    end
+
+    unidad_ids.each do |unidad_id|
+      AsignacionMeta.find_or_create_by(
+        meta_id: meta_id,
+        unidad_id: unidad_id
+      )
+    end
+
+    redirect_to asignacion_metas_path,
+                notice: "Asignaciones creadas correctamente"
   end
 
-  # PATCH/PUT /asignacion_metas/1 or /asignacion_metas/1.json
   def update
-    respond_to do |format|
-      if @asignacion_meta.update(asignacion_meta_params)
-        format.html { redirect_to @asignacion_meta, notice: "Asignacion meta was successfully updated.", status: :see_other }
-        format.json { render :show, status: :ok, location: @asignacion_meta }
-      else
-        format.html { render :edit, status: :unprocessable_content }
-        format.json { render json: @asignacion_meta.errors, status: :unprocessable_content }
-      end
+    meta = Meta.includes(:unidades).find(params[:id])
+
+    meta_id = params.dig(:asignacion_meta, :meta_id)
+    unidad_ids = params[:unidad_ids] || []
+
+    if meta_id.blank?
+      flash.now[:alert] = "Debe seleccionar una meta"
+      @meta = meta
+      @asignacion_meta = AsignacionMeta.new
+      render :edit, status: :unprocessable_entity
+      return
     end
+
+    meta.unidad_ids = unidad_ids.map(&:to_i)
+
+    redirect_to asignacion_metas_path,
+                notice: "Asignaciones actualizadas correctamente"
   end
 
-  # DELETE /asignacion_metas/1 or /asignacion_metas/1.json
   def destroy
     @asignacion_meta.destroy!
 
-    respond_to do |format|
-      format.html { redirect_to asignacion_metas_path, notice: "Asignacion meta was successfully destroyed.", status: :see_other }
-      format.json { head :no_content }
-    end
+    redirect_to asignacion_metas_path,
+                notice: "Asignacion eliminada correctamente"
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_asignacion_meta
-      @asignacion_meta = AsignacionMeta.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def asignacion_meta_params
-      params.require(:asignacion_meta).permit(:unidad_id, :meta_id)
-    end
+  def set_asignacion_meta
+    @asignacion_meta = AsignacionMeta.find(params[:id])
+  end
 end

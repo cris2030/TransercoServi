@@ -1,11 +1,7 @@
 @import "bootstrap";
 
 body {
-  background: linear-gradient(
-    135deg,
-    #f5f7fa 0%,
-    #e4e8f0 100%
-  );
+  outline: 8px solid lime !important;
 }
 
 .card {
@@ -19,4 +15,27 @@ body {
 .form-control:focus {
   box-shadow: none;
   border-color: #212529;
+}
+
+.tabla-control-servicios {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.tabla-control-servicios table {
+  width: 100%;
+}
+
+.tabla-control-servicios thead th {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: #212529;
+  color: white;
+}
+
+.tabla-control-servicios thead th {
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }

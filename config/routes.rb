@@ -4,6 +4,11 @@ Rails.application.routes.draw do
   resources :servicios
   resources :asignacion_metas
   
+  resources :unidades do
+    collection do
+      post :sync_from_api
+    end
+  end
 
   get  "control_servicios", to: "control_servicios#index"
   post "unidades/sincronizar", to: "unidades#sincronizar", as: :sincronizar_unidades

@@ -57,7 +57,15 @@ class UnidadesController < ApplicationController
     end
   end
   
+  def sync_from_api
+    api = LinkerApi.new
 
+    if Unidad.sync_from_linker_api(api)
+      redirect_to unidades_path, notice: "Unidades sincronizadas correctamente"
+    else
+      redirect_to unidades_path, alert: "Error al sincronizar unidades"
+    end
+  end
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_unidad

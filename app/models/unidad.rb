@@ -21,4 +21,23 @@ class Unidad < ApplicationRecord
     servicios.order(fecha: :desc).first
   end
 
+  def self.sync_from_linker_api(api)
+    response = api.current_odometers
+
+    return false unless response[:Result] == "OK"
+
+    units = response[:OdometersInfo] || []
+
+    units.each do |item|
+      next if item[:UnitID].blank?
+
+      Unidad.find_or_create_by!(unitID: item[:UnitID].to_s) do |u|
+        u.codigo = item[:UnitName]
+        u.placa  = item[:Plates]
+      end
+    end
+
+    true
+  end
+
 end

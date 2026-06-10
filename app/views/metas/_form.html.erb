@@ -1,32 +1,122 @@
-
 <%= simple_form_for(@meta) do |f| %>
-  <%= f.error_notification %>
-  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
 
-  <div class="form-inputs">
-    <%= f.input :nombre %>
-    <%= f.input :cantidad_meta,
-            label: "Cantidad Meta (Km)" %>
+  <div class="card shadow-sm border-0 rounded-4">
 
-    <%= f.input :alerta_km,
-                label: "Alertar cuando falten (Km)" %>
+    <div class="card-header bg-dark text-white py-3 rounded-top-4">
+      <h4 class="mb-0">
+        <i class="bi bi-bullseye me-2"></i>
+        Configuración de Meta
+      </h4>
+    </div>
 
-    <%= f.input :urgente_km,
-                label: "Entrar en urgente cuando supere (Km)" %>
+    <div class="card-body p-4">
 
-    <%= f.input :color,
+      <%= f.error_notification %>
+
+      <% if f.object.errors[:base].present? %>
+        <div class="alert alert-danger">
+          <i class="bi bi-exclamation-triangle-fill me-2"></i>
+          <%= f.object.errors[:base].to_sentence %>
+        </div>
+      <% end %>
+
+      <!-- Nombre -->
+      <div class="row mb-3">
+        <div class="col-md-12">
+          <%= f.input :nombre,
+            label: "Nombre de la Meta",
+            input_html: {
+              class: "form-control"
+            } %>
+        </div>
+      </div>
+
+      <!-- Kilometrajes -->
+      <div class="row">
+
+        <div class="col-md-4">
+          <div class="border rounded-4 p-3 bg-light h-100">
+            <h6 class="text-success mb-3">
+              <i class="bi bi-flag-fill"></i>
+              Meta
+            </h6>
+
+            <%= f.input :cantidad_meta,
+              label: "Cantidad Meta (Km)",
+              input_html: {
+                class: "form-control"
+              } %>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="border rounded-4 p-3 bg-warning bg-opacity-10 h-100">
+            <h6 class="text-warning mb-3">
+              <i class="bi bi-bell-fill"></i>
+              Alerta
+            </h6>
+
+            <%= f.input :alerta_km,
+              label: "Alertar cuando falten (Km)",
+              input_html: {
+                class: "form-control"
+              } %>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="border rounded-4 p-3 bg-danger bg-opacity-10 h-100">
+            <h6 class="text-danger mb-3">
+              <i class="bi bi-exclamation-octagon-fill"></i>
+              Urgente
+            </h6>
+
+            <%= f.input :urgente_km,
+              label: "Entrar a urgente cuando supere (Km)",
+              input_html: {
+                class: "form-control"
+              } %>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Color -->
+      <div class="row mt-4">
+        <div class="col-md-6">
+
+          <%= f.input :color,
             collection: [
-              ['Rojo', 'red'],
-              ['Amarillo', 'yellow'],
-              ['Verde', 'green'],
-              ['Naranja', 'orange'],
-              ['Morado', 'purple']
+              ['🔴 Rojo', 'red'],
+              ['🟡 Amarillo', 'yellow'],
+              ['🟢 Verde', 'green'],
+              ['🟠 Naranja', 'orange'],
+              ['🟣 Morado', 'purple']
             ],
-            prompt: "Seleccione un color" %>
+            prompt: "Seleccione un color",
+            label: "Color Identificador",
+            input_html: {
+              class: "form-select"
+            } %>
+
+        </div>
+      </div>
+
+    </div>
+
+    <div class="card-footer bg-light d-flex justify-content-between align-items-center p-3">
+
+      <%= link_to metas_path, class: "btn btn-outline-secondary" do %>
+        <i class="bi bi-arrow-left"></i>
+        Regresar
+      <% end %>
+
+      <%= f.button :submit,
+          (@meta.new_record? ? "Guardar Meta" : "Actualizar Meta"),
+          class: "btn btn-success px-4" %>
+
+    </div>
 
   </div>
 
-  <div class="form-actions">
-    <%= f.button :submit %>
-  </div>
 <% end %>

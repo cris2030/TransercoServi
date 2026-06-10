@@ -1,12 +1,36 @@
-<% content_for :title, "Editing asignacion meta" %>
+<% content_for :title, "Asignación" %>
 
-<h1>Editing asignacion meta</h1>
+<div class="container py-5">
+  <div class="row justify-content-center">
 
-<%= render "form", asignacion_meta: @asignacion_meta %>
+    <div class="col-lg-10">
 
-<br>
+      <div class="mb-4">
+        <h1 class="fw-bold text-warning">
+          <i class="bi bi-pencil-square"></i>
+          Asignación
+        </h1>
 
-<div>
-  <%= link_to "Show this asignacion meta", @asignacion_meta %> |
-  <%= link_to "Back to asignacion metas", asignacion_metas_path %>
+        <p class="text-muted mb-0">
+          Modifique las unidades asociadas a la meta.
+        </p>
+      </div>
+
+      <%= render "form", asignacion_meta: @asignacion_meta %>
+
+      <div class="text-center mt-4">
+
+        <%= link_to metas_path,
+            class: "btn btn-outline-secondary" do %>
+
+          <i class="bi bi-list"></i>
+          Volver al listado
+
+        <% end %>
+
+      </div>
+
+    </div>
+
+  </div>
 </div>

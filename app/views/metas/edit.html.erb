@@ -1,12 +1,36 @@
-<% content_for :title, "Editing meta" %>
+<% content_for :title, "Editar Meta" %>
 
-<h1>Editing meta</h1>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
 
-<%= render "form", meta: @meta %>
+      <div class="mb-4">
+        <h1 class="fw-bold text-warning">
+          <i class="bi bi-pencil-square"></i>
+          Editar Meta
+        </h1>
 
-<br>
+        <p class="text-muted mb-0">
+          Actualice la configuración de la meta seleccionada.
+        </p>
+      </div>
 
-<div>
-  <%= link_to "Show this meta", @meta %> |
-  <%= link_to "Back to metas", metas_path %>
+      <%= render "form", meta: @meta %>
+
+      <div class="mt-4 text-center">
+
+        <%= link_to @meta, class: "btn btn-outline-info me-2" do %>
+          <i class="bi bi-eye"></i>
+          Ver Meta
+        <% end %>
+
+        <%= link_to metas_path, class: "btn btn-outline-secondary" do %>
+          <i class="bi bi-list"></i>
+          Listado de Metas
+        <% end %>
+
+      </div>
+
+    </div>
+  </div>
 </div>

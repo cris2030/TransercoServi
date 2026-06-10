@@ -1,11 +1,24 @@
-<% content_for :title, "New asignacion meta" %>
+<% content_for :title, "Nueva Asignación" %>
 
-<h1>New asignacion meta</h1>
+<div class="container py-5">
+  <div class="row justify-content-center">
 
-<%= render "form", asignacion_meta: @asignacion_meta %>
+    <div class="col-lg-10">
 
-<br>
+      <div class="mb-4">
+        <h1 class="fw-bold text-info">
+          <i class="bi bi-plus-circle"></i>
+          Nueva Asignación de Meta
+        </h1>
 
-<div>
-  <%= link_to "Back to asignacion metas", asignacion_metas_path %>
+        <p class="text-muted mb-0">
+          Asigne una meta a una o varias unidades.
+        </p>
+      </div>
+
+      <%= render "form", asignacion_meta: @asignacion_meta %>
+
+    </div>
+
+  </div>
 </div>

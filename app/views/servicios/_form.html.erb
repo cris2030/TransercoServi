@@ -1,17 +1,120 @@
-
 <%= simple_form_for(@servicio) do |f| %>
+
   <%= hidden_field_tag :return_to, @return_to %>
-  <%= f.error_notification %>
-  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
 
-  <div class="form-inputs">
-    <%= f.association :unidad %>
-    <%= f.input :kilometraje %>
-    <%= f.input :fecha %>
-    <%= f.input :nom_mecanico %>
+  <div class="card shadow-sm border-0 rounded-4">
+
+    <!-- Header -->
+    <div class="card-header bg-dark text-white py-3 rounded-top-4">
+      <h4 class="mb-0">
+        <i class="bi bi-tools me-2"></i>
+        Registro de Servicio
+      </h4>
+    </div>
+
+    <!-- Body -->
+    <div class="card-body p-4">
+
+      <%= f.error_notification %>
+
+      <% if f.object.errors[:base].present? %>
+        <div class="alert alert-danger">
+          <i class="bi bi-exclamation-triangle-fill me-2"></i>
+          <%= f.object.errors[:base].to_sentence %>
+        </div>
+      <% end %>
+
+      <!-- Información General -->
+      <div class="card border-0 bg-light mb-4">
+        <div class="card-body">
+
+          <h6 class="text-primary fw-bold mb-3">
+            <i class="bi bi-truck"></i>
+            Información de la Unidad
+          </h6>
+
+          <div class="row">
+
+            <div class="col-md-6">
+              <%= f.association :unidad,
+                    label: "Unidad",
+                    input_html: {
+                      class: "form-select"
+                    } %>
+            </div>
+
+            <div class="col-md-6">
+              <%= f.input :kilometraje,
+                    label: "Kilometraje Actual",
+                    input_html: {
+                      class: "form-control"
+                    } %>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Datos del Servicio -->
+      <div class="card border-0 bg-light">
+
+        <div class="card-body">
+
+          <h6 class="text-success fw-bold mb-3">
+            <i class="bi bi-wrench-adjustable-circle"></i>
+            Datos del Servicio
+          </h6>
+
+          <div class="row">
+
+            <div class="col-md-6">
+              <%= f.input :fecha,
+                    as: :string,
+                    label: "Fecha del Servicio",
+                    input_html: {
+                      type: "date",
+                      class: "form-control"
+                    } %>
+            </div>
+
+            <div class="col-md-6">
+              <%= f.input :nom_mecanico,
+                    label: "Nombre del Mecánico",
+                    input_html: {
+                      class: "form-control"
+                    } %>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="card-footer bg-light d-flex justify-content-between">
+
+      <%= link_to(
+            @return_to.presence || servicios_path,
+            class: "btn btn-outline-secondary"
+          ) do %>
+
+        <i class="bi bi-arrow-left"></i>
+        Regresar
+
+      <% end %>
+
+      <%= f.button :submit,
+            (@servicio.new_record? ?
+              "Guardar Servicio" :
+              "Actualizar Servicio"),
+            class: "btn btn-primary px-4" %>
+
+    </div>
+
   </div>
 
-  <div class="form-actions">
-    <%= f.button :submit %>
-  </div>
 <% end %>

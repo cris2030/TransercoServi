@@ -1,11 +1,22 @@
-<% content_for :title, "New meta" %>
+<% content_for :title, "Nueva Meta" %>
 
-<h1>New meta</h1>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
 
-<%= render "form", meta: @meta %>
+      <div class="mb-4">
+        <h1 class="fw-bold text-success">
+          <i class="bi bi-plus-circle"></i>
+          Nueva Meta
+        </h1>
 
-<br>
+        <p class="text-muted mb-0">
+          Defina una nueva meta de control para el sistema.
+        </p>
+      </div>
 
-<div>
-  <%= link_to "Back to metas", metas_path %>
+      <%= render "form", meta: @meta %>
+
+    </div>
+  </div>
 </div>

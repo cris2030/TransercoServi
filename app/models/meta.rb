@@ -42,9 +42,7 @@ validates :urgente_km,
   end
 
   def urgente_desde
-    return nil unless created_at && tiempo_urgencia
-
-    created_at + tiempo_urgencia
+    cantidad_meta + urgente_km
   end
 
   def estado(km_actual)

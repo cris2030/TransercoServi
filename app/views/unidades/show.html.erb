@@ -64,28 +64,14 @@
 
         <% if @unidad.metas.any? %>
 
-          <% @unidad.metas.order(:nivel_imp).each do |meta| %>
+          <% @unidad.metas.each do |meta| %>
 
             <div class="mb-3">
 
               <span class="badge"
                     style="background-color:<%= meta.color %>; color:white;">
-                <%= meta.nombre %> - Nivel <%= meta.nivel_imp %>
+                <%= meta.nombre %>
               </span>
-
-              <p class="mb-1">
-                <strong>Inicio:</strong>
-                <%= number_with_precision(meta.kilometraje_inicio,
-                                          precision: 0,
-                                          delimiter: ",") %> km
-              </p>
-
-              <p class="mb-0">
-                <strong>Final:</strong>
-                <%= number_with_precision(meta.kilometraje_final,
-                                          precision: 0,
-                                          delimiter: ",") %> km
-              </p>
 
             </div>
 

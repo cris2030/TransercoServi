@@ -5,11 +5,6 @@
   <h2 class="fw-semibold mb-0">
     Unidades
   </h2>
-  <%= button_to "Sincronizar unidades",
-    sync_from_api_unidades_path,
-    method: :post,
-    class: "btn btn-success",
-    data: { turbo_confirm: "¿Deseas importar las unidades desde la API?" } %>
     
   <%= link_to "Nueva Unidad", new_unidad_path, class: "btn btn-primary" %>
 

@@ -1,11 +1,22 @@
-<% content_for :title, "New unidad" %>
+<% content_for :title, "Nueva Unidad" %>
 
-<h1>New unidad</h1>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
 
-<%= render "form", unidad: @unidad %>
+      <div class="mb-4">
+        <h1 class="fw-bold text-primary">
+          <i class="bi bi-plus-circle"></i>
+          Nueva Unidad
+        </h1>
 
-<br>
+        <p class="text-muted mb-0">
+          Complete la información para registrar una nueva unidad.
+        </p>
+      </div>
 
-<div>
-  <%= link_to "Regresar", unidades_path %>
+      <%= render "form", unidad: @unidad %>
+
+    </div>
+  </div>
 </div>

@@ -1,15 +1,59 @@
-
 <%= simple_form_for(@unidad) do |f| %>
-  <%= f.error_notification %>
-  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+  <div class="card shadow-sm border-0 rounded-4">
+    <div class="card-header bg-dark text-white py-3 rounded-top-4">
+      <h4 class="mb-0">
+        <i class="bi bi-truck me-2"></i>
+        Datos de la Unidad
+      </h4>
+    </div>
 
-  <div class="form-inputs">
-    <%= f.input :unitID %>
-    <%= f.input :codigo %>
-    <%= f.input :placa %>
-  </div>
+    <div class="card-body p-4">
 
-  <div class="form-actions">
-    <%= f.button :submit %>
+      <%= f.error_notification %>
+
+      <% if f.object.errors[:base].present? %>
+        <div class="alert alert-danger">
+          <%= f.object.errors[:base].to_sentence %>
+        </div>
+      <% end %>
+
+      <div class="row">
+        <div class="col-md-4">
+          <%= f.input :unitID,
+            label: "ID Unidad (Linker)",
+            input_html: {
+              class: "form-control"
+            } %>
+        </div>
+
+        <div class="col-md-4">
+          <%= f.input :codigo,
+            label: "Código",
+            input_html: {
+              class: "form-control"
+            } %>
+        </div>
+
+        <div class="col-md-4">
+          <%= f.input :placa,
+            label: "Placa",
+            input_html: {
+              class: "form-control text-uppercase"
+            } %>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="card-footer bg-light d-flex justify-content-between align-items-center p-3">
+      <%= link_to unidades_path, class: "btn btn-outline-secondary" do %>
+        <i class="bi bi-arrow-left"></i>
+        Regresar
+      <% end %>
+
+      <%= f.button :submit,
+        (@unidad.new_record? ? "Guardar Unidad" : "Actualizar Unidad"),
+        class: "btn btn-primary px-4" %>
+    </div>
   </div>
 <% end %>

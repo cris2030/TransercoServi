@@ -14,12 +14,12 @@ class ServiciosController < ApplicationController
   def new
     @servicio = Servicio.new(
       unidad_id: params[:unidad_id],
-      kilometraje: params[:kilometraje]
+      kilometraje: params[:kilometraje],
+      fecha: Date.current
     )
-    
+
     @return_to = params[:return_to]
   end
-
   # GET /servicios/1/edit
   def edit
   end

@@ -13,12 +13,19 @@ class MetasController < ApplicationController
   # GET /metas/new
   def new
     @meta = Meta.new
+
+    3.times do
+      @meta.meta_notificaciones.build
+    end
   end
 
-  # GET /metas/1/edit
   def edit
-  end
+    faltantes = 3 - @meta.meta_notificaciones.size
 
+    faltantes.times do
+      @meta.meta_notificaciones.build
+    end
+  end
   # POST /metas or /metas.json
   def create
     @meta = Meta.new(meta_params)
@@ -70,7 +77,13 @@ class MetasController < ApplicationController
         :cantidad_meta,
         :alerta_km,
         :urgente_km,
-        :color
+        :color,
+        meta_notificaciones_attributes: [
+          :id,
+          :user_id,
+          :estado,
+          :_destroy
+        ]
       )
     end
 end

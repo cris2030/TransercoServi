@@ -1,0 +1,30 @@
+<h2>
+  Reporte de unidades en estado
+  <%= @estado.upcase %>
+</h2>
+
+<p>
+  Se encontraron
+  <strong><%= @registros.count %></strong>
+  unidades.
+</p>
+
+<table border="1" cellpadding="6" cellspacing="0">
+  <thead>
+    <tr>
+      <th>Unidad</th>
+      <th>Meta</th>
+      <th>Km desde servicio</th>
+    </tr>
+  </thead>
+
+    <tbody>
+    <% @registros.each do |r| %>
+        <tr>
+        <td><%= r[:unidad].codigo %></td>
+        <td><%= r[:meta_actual]&.nombre %></td>
+        <td><%= number_with_delimiter(r[:km_desde_servicio]) %></td>
+        </tr>
+    <% end %>
+    </tbody>
+</table>

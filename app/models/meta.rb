@@ -7,6 +7,15 @@ class Meta < ApplicationRecord
 
   validates :nombre, presence: true, uniqueness: true
 
+  has_many :meta_notificaciones,
+         class_name: "MetaNotificacion",
+         foreign_key: "meta_id",
+         dependent: :destroy
+         
+  has_many :usuarios_notificados,
+           through: :meta_notificaciones,
+           source: :user
+
   validates :color,
             presence: true,
             inclusion: {

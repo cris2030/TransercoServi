@@ -39,5 +39,6 @@ class Unidad < ApplicationRecord
 
     true
   end
+  
 
 end

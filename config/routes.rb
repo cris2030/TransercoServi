@@ -1,9 +1,16 @@
 Rails.application.routes.draw do
+  resources :meta_notificaciones
   resources :unidades
   resources :metas
   resources :servicios
   resources :asignacion_metas
   
+  resources :control_servicios do
+    collection do
+      post :enviar_notificaciones
+    end
+  end
+    
   resources :unidades do
     collection do
       post :sync_from_api

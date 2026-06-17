@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_06_09_053756) do
+ActiveRecord::Schema[7.2].define(version: 2026_06_17_202931) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -31,6 +31,16 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_09_053756) do
     t.integer "importance"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "meta_notificaciones", force: :cascade do |t|
+    t.bigint "meta_id", null: false
+    t.bigint "user_id", null: false
+    t.string "estado"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["meta_id"], name: "index_meta_notificaciones_on_meta_id"
+    t.index ["user_id"], name: "index_meta_notificaciones_on_user_id"
   end
 
   create_table "metas", force: :cascade do |t|
@@ -96,6 +106,8 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_09_053756) do
 
   add_foreign_key "asignacion_metas", "metas"
   add_foreign_key "asignacion_metas", "unidades"
+  add_foreign_key "meta_notificaciones", "metas"
+  add_foreign_key "meta_notificaciones", "users"
   add_foreign_key "metas_unidads", "meta"
   add_foreign_key "servicios", "unidades"
 end

@@ -1,0 +1,60 @@
+<% content_for :title, "Configuración de Notificaciones" %>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+
+  <h2 class="fw-semibold mb-0">
+    Configuración de Notificaciones
+  </h2>
+
+</div>
+
+<div class="card shadow-sm border-0">
+
+  <div class="table-responsive">
+
+    <table class="table table-hover align-middle mb-0">
+
+      <thead class="table-dark">
+        <tr>
+          <th>Meta</th>
+          <th>Usuarios configurados</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <% @metas.each do |meta| %>
+
+          <tr>
+
+            <td>
+              <span class="badge"
+                    style="background-color:<%= meta.color %>; color:white;">
+                <%= meta.nombre %>
+              </span>
+            </td>
+
+            <td>
+              <span class="badge bg-primary">
+                <%= meta.meta_notificaciones.select(:user_id).distinct.count %>
+              </span>
+            </td>
+
+            <td>
+              <%= link_to "Configurar",
+                    edit_meta_notificacion_path(meta),
+                    class: "btn btn-warning btn-sm" %>
+            </td>
+
+          </tr>
+
+        <% end %>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>

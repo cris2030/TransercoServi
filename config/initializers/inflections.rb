@@ -12,6 +12,9 @@
    inflect.irregular "meta", "metas"
    inflect.irregular "asignacion_meta", "asignacion_metas"
    inflect.irregular "servicio", "servicios"
+   inflect.irregular "metanotificacion", "metanotificaciones"
+   inflect.irregular "MetaNotificacion", "MetaNotificaciones"
+   inflect.irregular "meta_notificacion", "meta_notificaciones"
 
 #   inflect.uncountable %w( fish sheep )
  end

@@ -35,14 +35,21 @@ class ControlServiciosController < ApplicationController
 
       next if destinatarios.empty?
 
-      ReporteUrgenteMailer
-        .reporte_diario(
-          registros,
-          destinatarios,
-          estado
-        )
-        .deliver_now
-    end
+        begin
+          ReporteUrgenteMailer
+            .reporte_diario(
+              registros,
+              destinatarios,
+              estado
+            )
+            .deliver_now
+
+        rescue => e
+          Rails.logger.error "ERROR: #{e.class}"
+          Rails.logger.error "MENSAJE: #{e.message}"
+          Rails.logger.error e.backtrace.first(20).join("\n")
+        end
+      end
 
     head :ok
   end

@@ -51,6 +51,17 @@
             <%= @servicio.fecha %>
           </p>
 
+          <p class="mb-2">
+            <strong>Hora:</strong>
+            <%= @servicio.hora&.strftime("%H:%M") %>
+          </p>
+
+          <p class="mb-2">
+            <strong>Número OT:</strong>
+            <%= @servicio.numero_ot %>
+          </p>
+
+
           <p class="mb-0">
             <strong>Mecánico:</strong>
             <%= @servicio.nom_mecanico %>

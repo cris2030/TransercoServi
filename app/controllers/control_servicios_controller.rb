@@ -35,23 +35,16 @@ class ControlServiciosController < ApplicationController
 
       next if destinatarios.empty?
 
-        begin
-          ReporteUrgenteMailer
-            .reporte_diario(
-              registros,
-              destinatarios,
-              estado
-            )
-            Rails.logger.info ENV["GMAIL_USERNAME"].inspect
-            Rails.logger.info ENV["GMAIL_APP_PASSWORD"].present?
-            .deliver_now
-
-        rescue => e
-          Rails.logger.error "ERROR: #{e.class}"
-          Rails.logger.error "MENSAJE: #{e.message}"
-          Rails.logger.error e.backtrace.first(20).join("\n")
-        end
-      end
+      ReporteUrgenteMailer
+        .reporte_diario(
+          registros,
+          destinatarios,
+          estado
+        )
+        Rails.logger.info "GMAIL_USERNAME presente: #{ENV['GMAIL_USERNAME'].present?}"
+        Rails.logger.info "GMAIL_APP_PASSWORD presente: #{ENV['GMAIL_APP_PASSWORD'].present?}"
+        .deliver_now
+    end
 
     head :ok
   end

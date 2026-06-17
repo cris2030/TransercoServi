@@ -15,7 +15,8 @@ class ServiciosController < ApplicationController
     @servicio = Servicio.new(
       unidad_id: params[:unidad_id],
       kilometraje: params[:kilometraje],
-      fecha: Date.current
+      fecha: Date.current,
+      hora: Time.current
     )
 
     @return_to = params[:return_to]
@@ -95,6 +96,13 @@ class ServiciosController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def servicio_params
-      params.require(:servicio).permit(:unidad_id, :kilometraje, :fecha, :nom_mecanico)
+      params.require(:servicio).permit(
+        :unidad_id,
+        :kilometraje,
+        :fecha,
+        :hora,
+        :numero_ot,
+        :nom_mecanico
+      )
     end
 end

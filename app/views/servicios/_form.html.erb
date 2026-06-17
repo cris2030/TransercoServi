@@ -66,27 +66,47 @@
             Datos del Servicio
           </h6>
 
-          <div class="row">
+    <div class="row">
 
-            <div class="col-md-6">
-              <%= f.input :fecha,
-                    as: :string,
-                    label: "Fecha del Servicio",
-                    input_html: {
-                      type: "date",
-                      class: "form-control"
-                    } %>
-            </div>
+      <div class="col-md-4">
+        <%= f.input :fecha,
+              as: :string,
+              label: "Fecha del Servicio",
+              input_html: {
+                type: "date",
+                class: "form-control"
+              } %>
+      </div>
 
-            <div class="col-md-6">
-              <%= f.input :nom_mecanico,
-                    label: "Nombre del Mecánico",
-                    input_html: {
-                      class: "form-control"
-                    } %>
-            </div>
+      <div class="col-md-4">
+        <%= f.input :hora,
+            input_html: {
+              type: "time",
+              class: "form-control"
+            } %>
+    </div>
 
-          </div>
+    <div class="row">
+
+      <div class="col-md-6">
+        <%= f.input :nom_mecanico,
+              label: "Nombre del Mecánico",
+              input_html: {
+                class: "form-control"
+              } %>
+      </div>
+
+      <div class="col-md-4">
+        <%= f.input :numero_ot,
+              label: "Número OT",
+              input_html: {
+                class: "form-control"
+              } %>
+      </div>
+
+    </div>
+
+</div>
 
         </div>
 

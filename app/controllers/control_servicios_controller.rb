@@ -42,6 +42,8 @@ class ControlServiciosController < ApplicationController
               destinatarios,
               estado
             )
+            Rails.logger.info ENV["GMAIL_USERNAME"].inspect
+            Rails.logger.info ENV["GMAIL_APP_PASSWORD"].present?
             .deliver_now
 
         rescue => e

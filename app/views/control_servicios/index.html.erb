@@ -1,25 +1,27 @@
 <h1>Control Servicios</h1>
 
-<div class="d-flex gap-2 mb-3">
-  <%= button_to "Actualizar Datos",
+<div class="d-flex gap-2 mb-3 align-items-center">
+
+  <input type="text"
+         id="buscador-unidad"
+         class="form-control"
+         placeholder="Buscar unidad...">
+
+  <%= button_to "Actualizar",
                 actualizar_control_servicios_path,
                 method: :post,
                 class: "btn btn-primary" %>
-<!--
-  <%= button_to "Enviar Correos",
-                enviar_notificaciones_control_servicios_path,
-                method: :post,
-                class: "btn btn-warning" %> -->
+
 </div>
 <div class="tabla-control-servicios">
   <table class="table table-bordered table-hover align-middle">
 
     <thead class="table-dark sticky-header">
       <tr>
-        <th>Unidad</th>
-        <th>Último Servicio</th>
-        <th>Días Recorridos</th>
-        <th>Km Recorridos</th>
+        <th onclick="sortTable(0)">Unidad</th>
+        <th onclick="sortTable(1)">Último Servicio</th>
+        <th onclick="sortTable(2)">Días Recorridos</th>
+        <th onclick="sortTable(3)">Km Recorridos</th>
         <th>Meta</th>
         <th>Estado</th>
         <th>Acciones</th>
@@ -163,3 +165,65 @@
 
   </table>
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  const input = document.getElementById("buscador-unidad");
+  const filas = document.querySelectorAll("tbody tr");
+
+  input.addEventListener("keyup", function () {
+
+    const valor = this.value.toLowerCase();
+
+    filas.forEach(fila => {
+
+      const unidad = fila.querySelector("td strong");
+
+      if (!unidad) return;
+
+      const texto = unidad.textContent.toLowerCase();
+
+      fila.style.display = texto.includes(valor) ? "" : "none";
+
+    });
+
+  });
+
+});
+</script>
+<script>
+let sortDirection = {};
+
+function sortTable(columnIndex) {
+
+  const table = document.querySelector("table");
+  const tbody = table.querySelector("tbody");
+
+  const rows = Array.from(tbody.querySelectorAll("tr"));
+
+  const asc = !sortDirection[columnIndex];
+  sortDirection[columnIndex] = asc;
+
+  rows.sort((a, b) => {
+
+    const cellA = a.children[columnIndex].innerText.trim();
+    const cellB = b.children[columnIndex].innerText.trim();
+
+    const numA = parseFloat(cellA.replace(/[^0-9.-]+/g, ""));
+    const numB = parseFloat(cellB.replace(/[^0-9.-]+/g, ""));
+
+    const isNumeric = !isNaN(numA) && !isNaN(numB);
+
+    if (isNumeric) {
+      return asc ? numA - numB : numB - numA;
+    }
+
+    return asc
+      ? cellA.localeCompare(cellB)
+      : cellB.localeCompare(cellA);
+  });
+
+  rows.forEach(row => tbody.appendChild(row));
+}
+</script>

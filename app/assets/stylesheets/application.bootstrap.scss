@@ -1,2 +1,15 @@
 @import 'bootstrap/scss/bootstrap';
 @import 'bootstrap-icons/font/bootstrap-icons';
+
+.tabla-control-servicios {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.tabla-control-servicios .sticky-header th {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: #212529;
+  color: white;
+}

@@ -2,6 +2,7 @@ source "https://rubygems.org"
 ruby "3.2.2"
 gem 'devise'
 gem 'simple_form'
+gem "kaminari"
 #gem "bootstrap", "~> 5.3"
 #gem "sassc-rails"
 

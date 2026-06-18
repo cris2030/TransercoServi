@@ -3,7 +3,7 @@ class ServiciosController < ApplicationController
 
   # GET /servicios or /servicios.json
   def index
-    @servicios = Servicio.all
+    @servicios = Servicio.order(created_at: :desc).page(params[:page]).per(10)
   end
 
   # GET /servicios/1 or /servicios/1.json

@@ -6,10 +6,23 @@
   overflow-y: auto;
 }
 
-.tabla-control-servicios .sticky-header th {
+/* sticky header */
+.tabla-control-servicios thead th {
   position: sticky;
   top: 0;
   z-index: 1000;
   background-color: #212529;
   color: white;
+}
+
+/* 🔥 en móviles desactiva el scroll interno */
+@media (max-width: 768px) {
+  .tabla-control-servicios {
+    max-height: none;
+    overflow: visible;
+  }
+
+  .tabla-control-servicios thead th {
+    position: static; /* o relative */
+  }
 }

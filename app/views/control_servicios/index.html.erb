@@ -226,26 +226,39 @@ function sortTable(columnIndex) {
     let cellA = a.children[columnIndex].innerText.trim();
     let cellB = b.children[columnIndex].innerText.trim();
 
-    // Columna Último Servicio
+    // Último Servicio
     if (columnIndex === 1) {
 
-      const parseFecha = (texto) => {
+      const partesA = cellA.match(/(\d{2})\/(\d{2})\/(\d{4})/);
+      const partesB = cellB.match(/(\d{2})\/(\d{2})\/(\d{4})/);
 
-        const partes = texto.match(/(\d{2})\/(\d{2})\/(\d{4})/);
+      const fechaA = partesA
+        ? new Date(partesA[3], partesA[2] - 1, partesA[1])
+        : new Date(0);
 
-        if (!partes) return new Date(0);
+      const fechaB = partesB
+        ? new Date(partesB[3], partesB[2] - 1, partesB[1])
+        : new Date(0);
 
-        const [, dia, mes, anio] = partes;
+      return asc ? fechaA - fechaB : fechaB - fechaA;
+    }
 
-        return new Date(anio, mes - 1, dia);
+    // Días Recorridos
+    if (columnIndex === 2) {
+
+      const parseDias = (texto) => {
+
+        const partes = texto.match(/(\d+)m-(\d+)d/);
+
+        if (!partes) return 0;
+
+        return (parseInt(partes[1]) * 30) + parseInt(partes[2]);
       };
 
-      const fechaA = parseFecha(cellA);
-      const fechaB = parseFecha(cellB);
+      const diasA = parseDias(cellA);
+      const diasB = parseDias(cellB);
 
-      return asc
-        ? fechaA - fechaB
-        : fechaB - fechaA;
+      return asc ? diasA - diasB : diasB - diasA;
     }
 
     const numA = parseFloat(cellA.replace(/[^0-9.-]+/g, ""));

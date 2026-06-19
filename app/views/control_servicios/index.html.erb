@@ -71,11 +71,20 @@
           </td>
 
           <td>
-            <% if fila[:fecha_ultimo_servicio].present? %>
-              <%= fila[:fecha_ultimo_servicio].strftime("%d/%m/%Y") %>
-              <%= fila[:hora_ultimo_servicio]&.strftime("%H:%M") %>
+            <% if fila[:ultimo_servicio].present? %>
+
+              <%= link_to servicio_path(fila[:ultimo_servicio]),
+                          class: "text-decoration-none" do %>
+
+                <%= fila[:fecha_ultimo_servicio].strftime("%d/%m/%Y") %>
+                <%= fila[:hora_ultimo_servicio]&.strftime("%H:%M") %>
+
+              <% end %>
+
             <% else %>
+
               -
+
             <% end %>
           </td>
 

@@ -93,17 +93,18 @@ class ControlServiciosController < ApplicationController
 
     km_restantes = meta_actual&.km_restantes(km_desde_servicio)
       
-      {
-        unidad: unidad,
-        fecha_ultimo_servicio: fecha_ultimo_servicio,
-        hora_ultimo_servicio: hora_ultimo_servicio,
-        dias_recorridos: dias_recorridos,
-        km_desde_servicio: km_desde_servicio,
-        odometro_actual: odometro_actual,
-        meta_actual: meta_actual,
-        estado: estado,
-        km_restantes: km_restantes
-      }
+    {
+      unidad: unidad,
+      ultimo_servicio: ultimo_servicio,
+      fecha_ultimo_servicio: fecha_ultimo_servicio,
+      hora_ultimo_servicio: hora_ultimo_servicio,
+      dias_recorridos: dias_recorridos,
+      km_desde_servicio: km_desde_servicio,
+      odometro_actual: odometro_actual,
+      meta_actual: meta_actual,
+      estado: estado,
+      km_restantes: km_restantes
+    }
       end
       
 

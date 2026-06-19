@@ -71,7 +71,12 @@
           </td>
 
           <td>
-            <%= fila[:fecha_ultimo_servicio]&.strftime("%d/%m/%Y") || "-" %>
+            <% if fila[:fecha_ultimo_servicio].present? %>
+              <%= fila[:fecha_ultimo_servicio].strftime("%d/%m/%Y") %>
+              <%= fila[:hora_ultimo_servicio]&.strftime("%H:%M") %>
+            <% else %>
+              -
+            <% end %>
           </td>
 
           <td>
@@ -167,16 +172,17 @@
 </div>
 
 <script>
-document.addEventListener("DOMContentLoaded", function () {
+function inicializarBuscador() {
 
   const input = document.getElementById("buscador-unidad");
-  const filas = document.querySelectorAll("tbody tr");
 
-  input.addEventListener("keyup", function () {
+  if (!input) return;
+
+  input.addEventListener("input", function () {
 
     const valor = this.value.toLowerCase();
 
-    filas.forEach(fila => {
+    document.querySelectorAll("tbody tr").forEach(fila => {
 
       const unidad = fila.querySelector("td strong");
 
@@ -184,13 +190,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
       const texto = unidad.textContent.toLowerCase();
 
-      fila.style.display = texto.includes(valor) ? "" : "none";
+      fila.style.display =
+        texto.includes(valor) ? "" : "none";
 
     });
 
   });
 
-});
+}
+document.addEventListener("turbo:load", inicializarBuscador);
 </script>
 <script>
 let sortDirection = {};
@@ -199,7 +207,6 @@ function sortTable(columnIndex) {
 
   const table = document.querySelector("table");
   const tbody = table.querySelector("tbody");
-
   const rows = Array.from(tbody.querySelectorAll("tr"));
 
   const asc = !sortDirection[columnIndex];
@@ -207,21 +214,42 @@ function sortTable(columnIndex) {
 
   rows.sort((a, b) => {
 
-    const cellA = a.children[columnIndex].innerText.trim();
-    const cellB = b.children[columnIndex].innerText.trim();
+    let cellA = a.children[columnIndex].innerText.trim();
+    let cellB = b.children[columnIndex].innerText.trim();
+
+    // Columna Último Servicio
+    if (columnIndex === 1) {
+
+      const parseFecha = (texto) => {
+
+        const partes = texto.match(/(\d{2})\/(\d{2})\/(\d{4})/);
+
+        if (!partes) return new Date(0);
+
+        const [, dia, mes, anio] = partes;
+
+        return new Date(anio, mes - 1, dia);
+      };
+
+      const fechaA = parseFecha(cellA);
+      const fechaB = parseFecha(cellB);
+
+      return asc
+        ? fechaA - fechaB
+        : fechaB - fechaA;
+    }
 
     const numA = parseFloat(cellA.replace(/[^0-9.-]+/g, ""));
     const numB = parseFloat(cellB.replace(/[^0-9.-]+/g, ""));
 
-    const isNumeric = !isNaN(numA) && !isNaN(numB);
-
-    if (isNumeric) {
+    if (!isNaN(numA) && !isNaN(numB)) {
       return asc ? numA - numB : numB - numA;
     }
 
     return asc
       ? cellA.localeCompare(cellB)
       : cellB.localeCompare(cellA);
+
   });
 
   rows.forEach(row => tbody.appendChild(row));

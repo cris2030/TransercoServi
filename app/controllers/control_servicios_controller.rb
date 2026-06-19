@@ -65,6 +65,8 @@ class ControlServiciosController < ApplicationController
     ultimo_servicio = unidad.servicios.max_by(&:fecha)
       
     fecha_ultimo_servicio = ultimo_servicio&.fecha
+    
+    hora_ultimo_servicio =  ultimo_servicio&.hora
 
     dias_recorridos = if fecha_ultimo_servicio.present?
 
@@ -93,7 +95,8 @@ class ControlServiciosController < ApplicationController
       
       {
         unidad: unidad,
-        fecha_ultimo_servicio: ultimo_servicio&.fecha,
+        fecha_ultimo_servicio: fecha_ultimo_servicio,
+        hora_ultimo_servicio: hora_ultimo_servicio,
         dias_recorridos: dias_recorridos,
         km_desde_servicio: km_desde_servicio,
         odometro_actual: odometro_actual,

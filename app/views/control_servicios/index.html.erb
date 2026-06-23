@@ -17,15 +17,16 @@
   <table class="table table-bordered table-hover align-middle">
 
     <thead class="table-dark sticky-header">
-      <tr>
-        <th onclick="sortTable(0)">Unidad</th>
-        <th onclick="sortTable(1)">Último Servicio</th>
-        <th onclick="sortTable(2)">Días Recorridos</th>
-        <th onclick="sortTable(3)">Km Recorridos</th>
-        <th>Meta</th>
-        <th>Estado</th>
-        <th>Acciones</th>
-      </tr>
+    <tr>
+      <th onclick="sortTable(0)">Unidad</th>
+      <th onclick="sortTable(1)">Último Servicio</th>
+      <th onclick="sortTable(2)">Días Recorridos</th>
+      <th onclick="sortTable(3)">Motor Hours</th>
+      <th onclick="sortTable(4)">Km Recorridos</th>
+      <th>Meta</th>
+      <th>Estado</th>
+      <th>Acciones</th>
+    </tr>
     </thead>
 
     <tbody>
@@ -90,6 +91,14 @@
 
           <td>
             <%= fila[:dias_recorridos] %>
+          </td>
+
+          <td>
+            <%= number_with_precision(
+                  fila[:motor_hours],
+                  precision: 0,
+                  delimiter: ","
+                ) %>
           </td>
 
           <td>

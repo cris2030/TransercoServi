@@ -81,7 +81,10 @@ class ControlServiciosController < ApplicationController
 
     km_servicio = ultimo_servicio&.kilometraje.to_i
 
-    odometro_actual = odometros[unidad.unitID.to_s].to_i
+    datos_unidad = odometros[unidad.unitID.to_s] || {}
+
+    odometro_actual = datos_unidad[:odometro].to_i
+    motor_hours = datos_unidad[:motor_hours].to_f
 
     km_desde_servicio =odometro_actual - km_servicio
 
@@ -99,6 +102,7 @@ class ControlServiciosController < ApplicationController
       fecha_ultimo_servicio: fecha_ultimo_servicio,
       hora_ultimo_servicio: hora_ultimo_servicio,
       dias_recorridos: dias_recorridos,
+      motor_hours: motor_hours,
       km_desde_servicio: km_desde_servicio,
       odometro_actual: odometro_actual,
       meta_actual: meta_actual,

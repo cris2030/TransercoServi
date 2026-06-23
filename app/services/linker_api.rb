@@ -82,12 +82,27 @@ class LinkerApi
 
       next unless item[:UnitID]
 
-      hash[item[:UnitID].to_s] =
-        item[:OdometerGps].to_f
+      hash[item[:UnitID].to_s] = {
+        odometro: item[:OdometerGps].to_f,
+        motor_hours: item[:MotorHours].to_f
+      }
 
     end
-
   end
   
+  def visits(plates:, from:, to:)
+    response = @connection.post(
+      "#{BASE_URL}/Visits.svc/restService/GetVisits"
+    ) do |req|
+      req.body = {
+        Plates: plates,
+        From: from,
+        To: to,
+        Session: session_data
+      }.to_json
+    end
+
+    JSON.parse(response.body, symbolize_names: true)
+  end
 
 end

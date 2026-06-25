@@ -21,7 +21,7 @@
       <th onclick="sortTable(0)">Unidad</th>
       <th onclick="sortTable(1)">Último Servicio</th>
       <th onclick="sortTable(2)">Días Recorridos</th>
-      <!-- <th onclick="sortTable(3)">Motor Hours</th> -->
+      <!--<th onclick="sortTable(3)">Motor Hours</th> -->
       <th onclick="sortTable(4)">Km Recorridos</th>
       <th>Meta</th>
       <th>Estado</th>
@@ -94,11 +94,21 @@
           </td>
 <!--
           <td>
-            <%= number_with_precision(
-                  fila[:motor_hours],
-                  precision: 0,
-                  delimiter: ","
-                ) %>
+
+            <% if fila[:motor_hours].present? %>
+
+              <%= number_with_precision(
+                    fila[:hm_desde_servicio],
+                    precision: 0,
+                    delimiter: ","
+                  ) %>
+
+            <% else %>
+
+              N/A
+
+            <% end %>
+
           </td>-->
 
           <td>
@@ -174,6 +184,7 @@
                 new_servicio_path(
                   unidad_id: fila[:unidad].id,
                   kilometraje: fila[:odometro_actual],
+                  motor_hours: fila[:motor_hours],
                   return_to: request.fullpath
                 ),
                 class: "btn btn-primary btn-sm" %>

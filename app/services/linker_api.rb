@@ -30,7 +30,7 @@ class LinkerApi
   end
 
   def session_data
-    login[:Session]
+    @session_data ||= login[:Session]
   end
 
   def current_locations
@@ -71,21 +71,21 @@ class LinkerApi
   end
 
   def odometros_por_unidad
+    Rails.cache.fetch("linker_odometros", expires_in: 5.minutes) do
 
-    response = current_odometers
+      response = current_odometers
 
-    return {} unless response[:Result] == "OK"
+      next {} unless response[:Result] == "OK"
 
-    odometers = response[:OdometersInfo] || []
+      (response[:OdometersInfo] || []).each_with_object({}) do |item, hash|
 
-    odometers.each_with_object({}) do |item, hash|
+        hash[item[:UnitID].to_s] = {
+          odometro_gps: item[:OdometerGps].to_f,
+          odometro_ecm: item[:OdometerEcm].to_f,
+          motor_hours: item[:MotorHours].to_f
+        }
 
-      next unless item[:UnitID]
-
-      hash[item[:UnitID].to_s] = {
-        odometro: item[:OdometerGps].to_f,
-        motor_hours: item[:MotorHours].to_f
-      }
+      end
 
     end
   end

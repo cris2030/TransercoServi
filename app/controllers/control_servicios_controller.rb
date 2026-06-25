@@ -58,11 +58,10 @@ class ControlServiciosController < ApplicationController
     odometros = api.odometros_por_unidad
 
     @control_servicios =
-    Unidad
-    .includes(:metas, :servicios)
+    Unidad.includes(:ultimo_servicio, :metas)
     .map do |unidad|
 
-    ultimo_servicio = unidad.servicios.max_by(&:fecha)
+    ultimo_servicio = unidad.ultimo_servicio
       
     fecha_ultimo_servicio = ultimo_servicio&.fecha
     
@@ -80,13 +79,26 @@ class ControlServiciosController < ApplicationController
     end
 
     km_servicio = ultimo_servicio&.kilometraje.to_i
+    hm_servicio = ultimo_servicio&.motor_hours
 
     datos_unidad = odometros[unidad.unitID.to_s] || {}
 
-    odometro_actual = datos_unidad[:odometro].to_i
-    motor_hours = datos_unidad[:motor_hours].to_f
+    odometro_actual =
+      if unidad.usar_odometro_ecm
+        datos_unidad[:odometro_ecm].to_i
+      else
+        datos_unidad[:odometro_gps].to_i
+      end
+
+    motor_hours =
+      if unidad.mostrar_motor_hours
+        datos_unidad[:motor_hours].to_f
+      else
+        nil
+      end
 
     km_desde_servicio =odometro_actual - km_servicio
+    hm_desde_servicio = motor_hours.present? ? (motor_hours - hm_servicio) : nil
 
     meta_actual =
       unidad.metas.min_by do |meta|
@@ -104,6 +116,7 @@ class ControlServiciosController < ApplicationController
       dias_recorridos: dias_recorridos,
       motor_hours: motor_hours,
       km_desde_servicio: km_desde_servicio,
+      hm_desde_servicio: hm_desde_servicio,
       odometro_actual: odometro_actual,
       meta_actual: meta_actual,
       estado: estado,

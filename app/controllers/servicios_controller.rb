@@ -15,6 +15,7 @@ class ServiciosController < ApplicationController
     @servicio = Servicio.new(
       unidad_id: params[:unidad_id],
       kilometraje: params[:kilometraje],
+      motor_hours: params[:motor_hours],
       fecha: Date.current,
       hora: Time.current
     )
@@ -99,6 +100,7 @@ class ServiciosController < ApplicationController
       params.require(:servicio).permit(
         :unidad_id,
         :kilometraje,
+        :motor_hours,
         :fecha,
         :hora,
         :numero_ot,

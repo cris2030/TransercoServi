@@ -47,6 +47,29 @@
           </p>
 
           <p class="mb-2">
+            <strong>Horas Motor:</strong>
+
+            <% if @servicio.motor_hours.present? %>
+
+              <span class="badge bg-info text-dark">
+                <%= number_with_precision(
+                      @servicio.motor_hours,
+                      precision: 1,
+                      delimiter: ","
+                    ) %> h
+              </span>
+
+            <% else %>
+
+              <span class="text-muted">
+                N/A
+              </span>
+
+            <% end %>
+
+          </p>
+
+          <p class="mb-2">
             <strong>Fecha:</strong>
             <%= @servicio.fecha %>
           </p>

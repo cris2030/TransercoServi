@@ -73,7 +73,13 @@ class UnidadesController < ApplicationController
     end
 
     # Only allow a list of trusted parameters through.
-    def unidad_params
-      params.require(:unidad).permit(:unitID, :codigo, :placa)
-    end
+  def unidad_params
+    params.require(:unidad).permit(
+      :unitID,
+      :codigo,
+      :placa,
+      :mostrar_motor_hours,
+      :usar_odometro_ecm
+    )
+  end
 end

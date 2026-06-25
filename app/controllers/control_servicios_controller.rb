@@ -98,7 +98,10 @@ class ControlServiciosController < ApplicationController
       end
 
     km_desde_servicio =odometro_actual - km_servicio
-    hm_desde_servicio = motor_hours.present? ? (motor_hours - hm_servicio) : nil
+    hm_desde_servicio =
+    motor_hours.present? && hm_servicio.present? ?
+      (motor_hours - hm_servicio) :
+      nil
 
     meta_actual =
       unidad.metas.min_by do |meta|

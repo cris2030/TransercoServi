@@ -11,30 +11,89 @@
 
   <div class="card-body">
 
-    <p>
-      <strong>Cantidad Meta:</strong>
-      <%= @meta.cantidad_meta %> Km
-    </p>
+    <!-- Configuración por Kilómetros -->
+    <div class="mb-4">
 
-    <p>
-      <strong>Alertar cuando falten:</strong>
-      <%= @meta.alerta_km %> Km
-    </p>
+      <h5 class="border-bottom pb-2">
+        🚛 Configuración por Kilómetros
+      </h5>
 
-    <p>
-      <strong>Urgente cuando supere:</strong>
-      <%= @meta.urgente_km %> Km
-    </p>
+      <div class="row">
 
-    <p>
-      <strong>Color:</strong>
+        <div class="col-md-4">
+          <div class="border rounded p-3 bg-light">
+            <small class="text-muted d-block">Meta</small>
+            <strong><%= number_with_delimiter(@meta.cantidad_meta) %> Km</strong>
+          </div>
+        </div>
 
-      <span
-        class="badge"
-        style="background-color:<%= @meta.color %>; color:white;">
+        <div class="col-md-4">
+          <div class="border rounded p-3 bg-warning bg-opacity-10">
+            <small class="text-muted d-block">Alerta</small>
+            <strong><%= number_with_delimiter(@meta.alerta_km) %> Km</strong>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="border rounded p-3 bg-danger bg-opacity-10">
+            <small class="text-muted d-block">Urgente</small>
+            <strong><%= number_with_delimiter(@meta.urgente_km) %> Km</strong>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <% if @meta.cantidad_meta_horas.present? %>
+
+      <!-- Configuración por Horas -->
+      <div class="mb-4">
+
+        <h5 class="border-bottom pb-2">
+          ⏱️ Configuración por Horas de Motor
+        </h5>
+
+        <div class="row">
+
+          <div class="col-md-4">
+            <div class="border rounded p-3 bg-light">
+              <small class="text-muted d-block">Meta</small>
+              <strong><%= number_with_delimiter(@meta.cantidad_meta_horas) %> Horas</strong>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="border rounded p-3 bg-warning bg-opacity-10">
+              <small class="text-muted d-block">Alerta</small>
+              <strong><%= number_with_delimiter(@meta.alerta_horas) %> Horas</strong>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="border rounded p-3 bg-danger bg-opacity-10">
+              <small class="text-muted d-block">Urgente</small>
+              <strong><%= number_with_delimiter(@meta.urgente_horas) %> Horas</strong>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    <% end %>
+
+    <div class="mt-4">
+
+      <strong>Color de la Meta</strong>
+      <br>
+
+      <span class="badge fs-6 px-3 py-2"
+            style="background-color:<%= @meta.color %>; color:white;">
         <%= @meta.color.capitalize %>
       </span>
-    </p>
+
+    </div>
 
   </div>
 

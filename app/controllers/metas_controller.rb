@@ -77,7 +77,13 @@ class MetasController < ApplicationController
         :cantidad_meta,
         :alerta_km,
         :urgente_km,
+
+        :cantidad_meta_horas,
+        :alerta_horas,
+        :urgente_horas,
+
         :color,
+
         meta_notificaciones_attributes: [
           :id,
           :user_id,

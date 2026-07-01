@@ -6,7 +6,6 @@ class ControlServiciosController < ApplicationController
 
   def actualizar
     cargar_dashboard
-
     render :index
   end
 
@@ -15,14 +14,11 @@ class ControlServiciosController < ApplicationController
     cargar_dashboard
 
     registros_por_estado =
-      @control_servicios.group_by do |fila|
-        fila[:estado].to_s
-      end
+      @control_servicios.group_by { |fila| fila[:estado].to_s }
 
     %w[alerta cumplido urgente].each do |estado|
 
-      registros =
-        registros_por_estado[estado] || []
+      registros = registros_por_estado[estado] || []
 
       next if registros.empty?
 
@@ -41,8 +37,6 @@ class ControlServiciosController < ApplicationController
           destinatarios,
           estado
         )
-        Rails.logger.info "GMAIL_USERNAME presente: #{ENV['GMAIL_USERNAME'].present?}"
-        Rails.logger.info "GMAIL_APP_PASSWORD presente: #{ENV['GMAIL_APP_PASSWORD'].present?}"
         .deliver_now
     end
 
@@ -54,107 +48,128 @@ class ControlServiciosController < ApplicationController
   def cargar_dashboard
 
     api = LinkerApi.new
-
     odometros = api.odometros_por_unidad
 
     @control_servicios =
-    Unidad.includes(:ultimo_servicio, :metas)
-    .map do |unidad|
+      Unidad.includes(:ultimo_servicio, :metas).map do |unidad|
 
-    ultimo_servicio = unidad.ultimo_servicio
-      
-    fecha_ultimo_servicio = ultimo_servicio&.fecha
-    
-    hora_ultimo_servicio =  ultimo_servicio&.hora
+        ultimo_servicio = unidad.ultimo_servicio
 
-    dias_recorridos = if fecha_ultimo_servicio.present?
+        fecha_ultimo_servicio = ultimo_servicio&.fecha
+        hora_ultimo_servicio  = ultimo_servicio&.hora
 
-    total_dias = 
-    (Date.current - fecha_ultimo_servicio.to_date).to_i
-        meses = total_dias / 30
-        dias  = total_dias % 30
-        "#{meses}m-#{dias}d"
-        else
-          "-"
-    end
+        dias_recorridos =
+          if fecha_ultimo_servicio.present?
+            total_dias = (Date.current - fecha_ultimo_servicio.to_date).to_i
+            meses = total_dias / 30
+            dias  = total_dias % 30
+            "#{meses}m-#{dias}d"
+          else
+            "-"
+          end
 
-    km_servicio = ultimo_servicio&.kilometraje.to_i
-    hm_servicio = ultimo_servicio&.motor_hours
+        km_servicio = ultimo_servicio&.kilometraje.to_i
+        hm_servicio = ultimo_servicio&.motor_hours
 
-    datos_unidad = odometros[unidad.unitID.to_s] || {}
+        datos_unidad = odometros[unidad.unitID.to_s] || {}
 
-    odometro_actual =
-      if unidad.usar_odometro_ecm
-        datos_unidad[:odometro_ecm].to_i
-      else
-        datos_unidad[:odometro_gps].to_i
-      end
+        odometro_actual =
+          if unidad.usar_odometro_ecm
+            datos_unidad[:odometro_ecm].to_i
+          else
+            datos_unidad[:odometro_gps].to_i
+          end
 
-    motor_hours =
-      if unidad.mostrar_motor_hours
-        datos_unidad[:motor_hours].to_f
-      else
-        nil
-      end
+        motor_hours =
+          if unidad.mostrar_motor_hours
+            datos_unidad[:motor_hours].to_f
+          end
 
-    km_desde_servicio =odometro_actual - km_servicio
-    hm_desde_servicio =
-    motor_hours.present? && hm_servicio.present? ?
-      (motor_hours - hm_servicio) :
-      nil
+        km_desde_servicio = odometro_actual - km_servicio
 
-    meta_actual =
-      unidad.metas.min_by do |meta|
-        meta.cantidad_meta
-      end
-    estado = meta_actual&.estado(km_desde_servicio)
+        hm_desde_servicio =
+          if motor_hours.present? && hm_servicio.present?
+            motor_hours - hm_servicio
+          end
 
-    km_restantes = meta_actual&.km_restantes(km_desde_servicio)
-      
-    {
-      unidad: unidad,
-      ultimo_servicio: ultimo_servicio,
-      fecha_ultimo_servicio: fecha_ultimo_servicio,
-      hora_ultimo_servicio: hora_ultimo_servicio,
-      dias_recorridos: dias_recorridos,
-      motor_hours: motor_hours,
-      km_desde_servicio: km_desde_servicio,
-      hm_desde_servicio: hm_desde_servicio,
-      odometro_actual: odometro_actual,
-      meta_actual: meta_actual,
-      estado: estado,
-      km_restantes: km_restantes
-    }
-      end
-      
+        meta_actual =
+          if unidad.mostrar_motor_hours
+            unidad.metas
+                  .select { |m| m.cantidad_meta_horas.present? }
+                  .min_by(&:cantidad_meta_horas)
+          else
+            unidad.metas
+                  .select { |m| m.cantidad_meta.present? }
+                  .min_by(&:cantidad_meta)
+          end
 
-    @control_servicios =
-    @control_servicios.sort_by do |fila|
+        if unidad.mostrar_motor_hours
 
-          prioridad =
-            case fila[:estado]
+          estado = meta_actual&.estado_horas(hm_desde_servicio)
 
-            when :urgente
-              0
+          restante = meta_actual&.horas_restantes(hm_desde_servicio)
 
-            when :cumplido
-              1
-
-            when :alerta
-              2
-
+          avance_meta =
+            if meta_actual && hm_desde_servicio
+              hm_desde_servicio - meta_actual.cantidad_meta_horas
             else
-              3
-
+              -999_999
             end
 
-          [
-            prioridad,
-            fila[:km_restantes] || 999999
-          ]
+        else
+
+          estado = meta_actual&.estado(km_desde_servicio)
+
+          restante = meta_actual&.km_restantes(km_desde_servicio)
+
+          avance_meta =
+            if meta_actual
+              km_desde_servicio - meta_actual.cantidad_meta
+            else
+              -999_999
+            end
+
         end
 
-  end
+        {
+          unidad: unidad,
+          ultimo_servicio: ultimo_servicio,
+          fecha_ultimo_servicio: fecha_ultimo_servicio,
+          hora_ultimo_servicio: hora_ultimo_servicio,
+          dias_recorridos: dias_recorridos,
+          motor_hours: motor_hours,
+          km_desde_servicio: km_desde_servicio,
+          hm_desde_servicio: hm_desde_servicio,
+          odometro_actual: odometro_actual,
+          meta_actual: meta_actual,
+          estado: estado,
+          restante: restante,
+          avance_meta: avance_meta
+        }
 
+      end
+
+    @control_servicios =
+      @control_servicios.sort_by do |fila|
+
+        prioridad =
+          case fila[:estado]
+          when :urgente
+            0
+          when :cumplido
+            1
+          when :alerta
+            2
+          else
+            3
+          end
+
+        [
+          prioridad,
+          -fila[:avance_meta]
+        ]
+      end
+
+  end
 
 end

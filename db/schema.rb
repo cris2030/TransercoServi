@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_06_25_161939) do
+ActiveRecord::Schema[7.2].define(version: 2026_07_01_204444) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -51,6 +51,9 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_25_161939) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "cantidad_meta"
+    t.integer "cantidad_meta_horas"
+    t.integer "alerta_horas"
+    t.integer "urgente_horas"
   end
 
   create_table "metas_unidads", force: :cascade do |t|

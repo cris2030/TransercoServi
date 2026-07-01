@@ -21,7 +21,7 @@
       <th onclick="sortTable(0)">Unidad</th>
       <th onclick="sortTable(1)">Último Servicio</th>
       <th onclick="sortTable(2)">Días Recorridos</th>
-      <!--<th onclick="sortTable(3)">Motor Hours</th> -->
+      <th onclick="sortTable(3)">Motor Hours</th>
       <th onclick="sortTable(4)">Km Recorridos</th>
       <th>Meta</th>
       <th>Estado</th>
@@ -92,7 +92,7 @@
           <td>
             <%= fila[:dias_recorridos] %>
           </td>
-<!--
+
           <td>
 
             <% if fila[:motor_hours].present? %>
@@ -109,7 +109,7 @@
 
             <% end %>
 
-          </td>-->
+          </td>
 
           <td>
             <%= number_with_precision(

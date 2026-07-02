@@ -60,10 +60,15 @@ class ControlServiciosController < ApplicationController
 
         dias_recorridos =
           if fecha_ultimo_servicio.present?
-            total_dias = (Date.current - fecha_ultimo_servicio.to_date).to_i
+
+            total_dias =
+              (Date.current - fecha_ultimo_servicio.to_date).to_i
+
             meses = total_dias / 30
             dias  = total_dias % 30
+
             "#{meses}m-#{dias}d"
+
           else
             "-"
           end
@@ -83,53 +88,48 @@ class ControlServiciosController < ApplicationController
         motor_hours =
           if unidad.mostrar_motor_hours
             datos_unidad[:motor_hours].to_f
+          else
+            nil
           end
 
-        km_desde_servicio = odometro_actual - km_servicio
+        km_desde_servicio =
+          odometro_actual - km_servicio
 
         hm_desde_servicio =
           if motor_hours.present? && hm_servicio.present?
             motor_hours - hm_servicio
+          else
+            nil
           end
+
+        # ==========================================
+        # Seleccionar la meta asignada
+        # ==========================================
 
         meta_actual =
-          if unidad.mostrar_motor_hours
-            unidad.metas
-                  .select { |m| m.cantidad_meta_horas.present? }
-                  .min_by(&:cantidad_meta_horas)
-          else
-            unidad.metas
-                  .select { |m| m.cantidad_meta.present? }
-                  .min_by(&:cantidad_meta)
-          end
+          unidad.metas.min_by(&:cantidad_meta)
 
-        if unidad.mostrar_motor_hours
+        # ==========================================
+        # Calcular estado considerando KM y HORAS
+        # ==========================================
 
-          estado = meta_actual&.estado_horas(hm_desde_servicio)
+        estado =
+          meta_actual&.estado_general(
+            km_desde_servicio,
+            hm_desde_servicio
+          )
 
-          restante = meta_actual&.horas_restantes(hm_desde_servicio)
+        restante =
+          meta_actual&.restante_general(
+            km_desde_servicio,
+            hm_desde_servicio
+          )
 
-          avance_meta =
-            if meta_actual && hm_desde_servicio
-              hm_desde_servicio - meta_actual.cantidad_meta_horas
-            else
-              -999_999
-            end
-
-        else
-
-          estado = meta_actual&.estado(km_desde_servicio)
-
-          restante = meta_actual&.km_restantes(km_desde_servicio)
-
-          avance_meta =
-            if meta_actual
-              km_desde_servicio - meta_actual.cantidad_meta
-            else
-              -999_999
-            end
-
-        end
+        avance_meta =
+          meta_actual&.avance_general(
+            km_desde_servicio,
+            hm_desde_servicio
+          ) || -999_999
 
         {
           unidad: unidad,

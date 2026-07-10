@@ -12,6 +12,7 @@
 
         <thead class="table-dark">
           <tr>
+            <th>UnitID</th>
             <th>Unidad</th>
             <th>Odómetro ECM</th>
             <th>Odómetro GPS</th>
@@ -19,17 +20,18 @@
         </thead>
 
         <tbody>
-
           <% @odometers[:OdometersInfo]&.each do |item| %>
 
-            <% unit_name = item[:UnitName]%>
+            <% unit_name = item[:UnitName] %>
 
             <tr>
 
               <td>
-                <strong>
-                  <%= unit_name %>
-                </strong>
+                <%= item[:UnitID] %>
+              </td>
+
+              <td>
+                <strong><%= unit_name %></strong>
               </td>
 
               <td>
@@ -43,7 +45,6 @@
             </tr>
 
           <% end %>
-
         </tbody>
 
       </table>

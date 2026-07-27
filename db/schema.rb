@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_07_01_204444) do
+ActiveRecord::Schema[7.2].define(version: 2026_07_27_214918) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -21,6 +21,16 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_01_204444) do
     t.datetime "updated_at", null: false
     t.index ["meta_id"], name: "index_asignacion_metas_on_meta_id"
     t.index ["unidad_id"], name: "index_asignacion_metas_on_unidad_id"
+  end
+
+  create_table "cymsas", force: :cascade do |t|
+    t.string "gps_id"
+    t.string "nombre"
+    t.string "matricula"
+    t.decimal "odometro"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["gps_id"], name: "index_cymsas_on_gps_id", unique: true
   end
 
   create_table "meta", force: :cascade do |t|

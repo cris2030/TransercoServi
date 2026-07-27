@@ -27,7 +27,10 @@ Rails.application.routes.draw do
   resources :odometers, only: [:index]
   resources :locations, only: [:index]
 
-
+  namespace :api do
+    post "/cymsas/import", to: "cymsas#import"
+    post "/cymsas/upload", to: "cymsas#upload"
+  end
   root "control_servicios#index"
   resources :reports, only: [:index]
   devise_for :users

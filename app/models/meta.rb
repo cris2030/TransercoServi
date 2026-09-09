@@ -14,6 +14,13 @@ class Meta < ApplicationRecord
            through: :meta_notificaciones,
            source: :user
 
+  has_many :asignacion_maquinaria_metas,
+           dependent: :destroy
+
+  has_many :maquinarias,
+           through: :asignacion_maquinaria_metas
+
+
   validates :nombre,
             presence: true,
             uniqueness: true
@@ -23,6 +30,11 @@ class Meta < ApplicationRecord
             inclusion: {
               in: %w[red yellow green orange purple]
             }
+
+
+  # =====================================================
+  # KILÓMETROS
+  # =====================================================
 
   validates :cantidad_meta,
             presence: true,
@@ -45,6 +57,11 @@ class Meta < ApplicationRecord
               greater_than_or_equal_to: 0
             }
 
+
+  # =====================================================
+  # HORAS
+  # =====================================================
+
   validates :cantidad_meta_horas,
             numericality: {
               only_integer: true,
@@ -66,9 +83,37 @@ class Meta < ApplicationRecord
             },
             allow_nil: true
 
+
+  # =====================================================
+  # DÍAS
+  # =====================================================
+
+  validates :cantidad_meta_dias,
+            numericality: {
+              only_integer: true,
+              greater_than: 0
+            },
+            allow_nil: true
+
+  validates :alerta_dias,
+            numericality: {
+              only_integer: true,
+              greater_than_or_equal_to: 0
+            },
+            allow_nil: true
+
+  validates :urgente_dias,
+            numericality: {
+              only_integer: true,
+              greater_than_or_equal_to: 0
+            },
+            allow_nil: true
+
+
   def to_s
     nombre
   end
+
 
   # =====================================================
   # KILÓMETROS
@@ -87,10 +132,13 @@ class Meta < ApplicationRecord
 
     if km_actual >= urgente_desde
       :urgente
+
     elsif km_actual >= cantidad_meta
       :cumplido
+
     elsif km_actual >= alerta_desde
       :alerta
+
     else
       nil
     end
@@ -101,6 +149,7 @@ class Meta < ApplicationRecord
 
     cantidad_meta - km_actual
   end
+
 
   # =====================================================
   # HORAS
@@ -125,10 +174,13 @@ class Meta < ApplicationRecord
 
     if horas_actuales >= urgente_desde_horas
       :urgente
+
     elsif horas_actuales >= cantidad_meta_horas
       :cumplido
+
     elsif horas_actuales >= alerta_desde_horas
       :alerta
+
     else
       nil
     end
@@ -142,14 +194,72 @@ class Meta < ApplicationRecord
     cantidad_meta_horas - horas_actuales
   end
 
+
   # =====================================================
-  # LÓGICA GENERAL (KM + HORAS)
+  # DÍAS
+  # =====================================================
+
+  def alerta_desde_dias
+
+    return nil unless cantidad_meta_dias.present?
+
+    cantidad_meta_dias - alerta_dias
+
+  end
+
+
+  def urgente_desde_dias
+
+    return nil unless cantidad_meta_dias.present?
+
+    cantidad_meta_dias + urgente_dias
+
+  end
+
+
+  def estado_dias(dias_actuales)
+
+    return nil if dias_actuales.nil?
+    return nil unless cantidad_meta_dias.present?
+
+    if dias_actuales >= urgente_desde_dias
+      :urgente
+
+    elsif dias_actuales >= cantidad_meta_dias
+      :cumplido
+
+    elsif dias_actuales >= alerta_desde_dias
+      :alerta
+
+    else
+      nil
+    end
+
+  end
+
+
+  def dias_restantes(dias_actuales)
+
+    return nil if dias_actuales.nil?
+    return nil unless cantidad_meta_dias.present?
+
+    cantidad_meta_dias - dias_actuales
+
+  end
+
+
+  # =====================================================
+  # LÓGICA GENERAL
+  # KM + HORAS
   # =====================================================
 
   def estado_general(km_actual, horas_actuales = nil)
 
-    estado_km = estado(km_actual)
-    estado_hm = estado_horas(horas_actuales)
+    estado_km =
+      estado(km_actual)
+
+    estado_hm =
+      estado_horas(horas_actuales)
 
     prioridades = {
       nil => 0,
@@ -158,35 +268,57 @@ class Meta < ApplicationRecord
       urgente: 3
     }
 
-    [estado_km, estado_hm].max_by { |e| prioridades[e] }
+    [estado_km, estado_hm]
+      .max_by { |e| prioridades[e] }
+
   end
+
 
   def restante_general(km_actual, horas_actuales = nil)
 
     restantes = []
 
-    restante_km = km_restantes(km_actual)
+    restante_km =
+      km_restantes(km_actual)
+
     restantes << restante_km unless restante_km.nil?
 
-    restante_hm = horas_restantes(horas_actuales)
+
+    restante_hm =
+      horas_restantes(horas_actuales)
+
     restantes << restante_hm unless restante_hm.nil?
 
+
     restantes.min
+
   end
+
 
   def avance_general(km_actual, horas_actuales = nil)
 
     avances = []
 
     if cantidad_meta.present? && km_actual.present?
-      avances << (km_actual - cantidad_meta)
+
+      avances << (
+        km_actual - cantidad_meta
+      )
+
     end
+
 
     if cantidad_meta_horas.present? && horas_actuales.present?
-      avances << (horas_actuales - cantidad_meta_horas)
+
+      avances << (
+        horas_actuales - cantidad_meta_horas
+      )
+
     end
 
+
     avances.max || -999_999
+
   end
 
 end

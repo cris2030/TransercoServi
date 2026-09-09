@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  maquinaria: one
+  fecha: 2026-09-09
+  hora: 2026-09-09 15:58:08
+
+two:
+  maquinaria: two
+  fecha: 2026-09-09
+  hora: 2026-09-09 15:58:08

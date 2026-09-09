@@ -1,0 +1,184 @@
+<% content_for :title, "Servicio de Maquinaria" %>
+
+<% if notice.present? %>
+
+  <div class="alert alert-success py-2">
+    <%= notice %>
+  </div>
+
+<% end %>
+
+
+<div class="card shadow-sm border-0">
+
+  <!-- HEADER -->
+
+  <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+
+    <div>
+
+      <h5 class="mb-0">
+
+        Servicio de Maquinaria
+
+        <%= @servicio_maquinaria.maquinaria&.codigo %>
+
+      </h5>
+
+      <small>
+
+        <%= @servicio_maquinaria.maquinaria&.nombre %>
+
+      </small>
+
+    </div>
+
+    <span class="badge bg-light text-dark">
+
+      <%= @servicio_maquinaria.fecha %>
+
+    </span>
+
+  </div>
+
+
+  <!-- BODY -->
+
+  <div class="card-body">
+
+    <div class="row g-3">
+
+
+      <!-- DETALLES DEL SERVICIO -->
+
+      <div class="col-md-6">
+
+        <div class="p-3 border rounded bg-light h-100">
+
+          <h6 class="text-muted mb-3">
+
+            Detalles del Servicio
+
+          </h6>
+
+
+          <p class="mb-2">
+
+            <strong>Fecha:</strong>
+
+            <%= @servicio_maquinaria.fecha %>
+
+          </p>
+
+
+          <p class="mb-0">
+
+            <strong>Hora:</strong>
+
+            <%= @servicio_maquinaria.hora&.strftime("%H:%M") %>
+
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <!-- MAQUINARIA -->
+
+      <div class="col-md-6">
+
+        <div class="p-3 border rounded bg-light h-100">
+
+          <h6 class="text-muted mb-3">
+
+            Maquinaria Asociada
+
+          </h6>
+
+
+          <% if @servicio_maquinaria.maquinaria.present? %>
+
+            <p class="mb-2">
+
+              <strong>Nombre:</strong>
+
+              <%= @servicio_maquinaria.maquinaria.nombre %>
+
+            </p>
+
+
+            <p class="mb-2">
+
+              <strong>Código:</strong>
+
+              <%= @servicio_maquinaria.maquinaria.codigo %>
+
+            </p>
+
+
+            <p class="mb-0">
+
+              <strong>Número de Serie:</strong>
+
+              <%= @servicio_maquinaria.maquinaria.numero_serie %>
+
+            </p>
+
+          <% else %>
+
+            <div class="alert alert-warning mb-0">
+
+              Este servicio no tiene maquinaria asociada
+
+            </div>
+
+          <% end %>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- ACCIONES -->
+
+<div class="mt-3 d-flex gap-2">
+
+  <%= link_to "Editar",
+
+      edit_servicio_maquinaria_path(
+        @servicio_maquinaria
+      ),
+
+      class: "btn btn-warning" %>
+
+
+  <%= link_to "Volver",
+
+      servicio_maquinarias_path,
+
+      class: "btn btn-secondary" %>
+
+
+  <%= button_to "Eliminar",
+
+      @servicio_maquinaria,
+
+      method: :delete,
+
+      class: "btn btn-danger",
+
+      form: {
+        data: {
+          turbo_confirm:
+            "¿Seguro que deseas eliminar este servicio?"
+        }
+      } %>
+
+</div>

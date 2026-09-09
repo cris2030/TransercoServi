@@ -83,6 +83,87 @@
 
     <% end %>
 
+    <% if @meta.cantidad_meta_dias.present? %>
+
+      <!-- Configuración por Días -->
+
+      <div class="mb-4">
+
+        <h5 class="border-bottom pb-2">
+
+          📅 Configuración por Días
+
+        </h5>
+
+
+        <div class="row">
+
+          <div class="col-md-4">
+
+            <div class="border rounded p-3 bg-light">
+
+              <small class="text-muted d-block">
+                Meta
+              </small>
+
+              <strong>
+                <%= number_with_delimiter(
+                      @meta.cantidad_meta_dias
+                    ) %>
+                Días
+              </strong>
+
+            </div>
+
+          </div>
+
+
+          <div class="col-md-4">
+
+            <div class="border rounded p-3 bg-warning bg-opacity-10">
+
+              <small class="text-muted d-block">
+                Alerta
+              </small>
+
+              <strong>
+                <%= number_with_delimiter(
+                      @meta.alerta_dias
+                    ) %>
+                Días
+              </strong>
+
+            </div>
+
+          </div>
+
+
+          <div class="col-md-4">
+
+            <div class="border rounded p-3 bg-danger bg-opacity-10">
+
+              <small class="text-muted d-block">
+                Urgente
+              </small>
+
+              <strong>
+                <%= number_with_delimiter(
+                      @meta.urgente_dias
+                    ) %>
+                Días
+              </strong>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    <% end %>
+
+
     <div class="mt-4">
 
       <strong>Color de la Meta</strong>

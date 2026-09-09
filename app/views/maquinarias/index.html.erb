@@ -1,0 +1,94 @@
+<% content_for :title, "Maquinarias" %>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+
+  <h2 class="fw-semibold mb-0">
+    Maquinarias
+  </h2>
+
+  <%= link_to "Nueva Maquinaria",
+      new_maquinaria_path,
+      class: "btn btn-primary" %>
+
+</div>
+
+<% if notice.present? %>
+
+  <div class="alert alert-success py-2">
+    <%= notice %>
+  </div>
+
+<% end %>
+
+<div class="card shadow-sm border-0">
+
+  <div class="table-responsive">
+
+    <table class="table table-hover align-middle mb-0">
+
+      <thead class="table-dark">
+
+        <tr>
+          <th>Nombre</th>
+          <th>Código</th>
+          <th>Número de Serie</th>
+          <th style="width:180px;">Acciones</th>
+        </tr>
+
+      </thead>
+
+      <tbody>
+
+        <% @maquinarias.each do |maquinaria| %>
+
+          <tr>
+
+            <td class="fw-semibold">
+              <%= maquinaria.nombre %>
+            </td>
+
+            <td>
+              <span class="badge bg-secondary">
+                <%= maquinaria.codigo %>
+              </span>
+            </td>
+
+            <td class="text-muted">
+              <%= maquinaria.numero_serie %>
+            </td>
+
+            <td>
+
+              <div class="d-flex gap-2">
+
+                <%= link_to "Ver",
+                    maquinaria,
+                    class: "btn btn-sm btn-outline-primary" %>
+
+                <%= link_to "Editar",
+                    edit_maquinaria_path(maquinaria),
+                    class: "btn btn-sm btn-outline-warning" %>
+
+                <%= button_to "Eliminar",
+                    maquinaria,
+                    method: :delete,
+                    data: {
+                      turbo_confirm: "¿Eliminar maquinaria?"
+                    },
+                    class: "btn btn-sm btn-outline-danger" %>
+
+              </div>
+
+            </td>
+
+          </tr>
+
+        <% end %>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>

@@ -1,0 +1,78 @@
+<%= simple_form_for(@maquinaria) do |f| %>
+
+  <div class="card shadow-sm border-0 rounded-4">
+
+    <div class="card-header bg-dark text-white py-3 rounded-top-4">
+
+      <h4 class="mb-0">
+        <i class="bi bi-tools me-2"></i>
+        Datos de la Maquinaria
+      </h4>
+
+    </div>
+
+    <div class="card-body p-4">
+
+      <%= f.error_notification %>
+
+      <% if f.object.errors[:base].present? %>
+        <div class="alert alert-danger">
+          <%= f.object.errors[:base].to_sentence %>
+        </div>
+      <% end %>
+
+      <div class="row">
+
+        <div class="col-md-4">
+
+          <%= f.input :nombre,
+            label: "Nombre",
+            input_html: {
+              class: "form-control"
+            } %>
+
+        </div>
+
+        <div class="col-md-4">
+
+          <%= f.input :codigo,
+            label: "Código",
+            input_html: {
+              class: "form-control"
+            } %>
+
+        </div>
+
+        <div class="col-md-4">
+
+          <%= f.input :numero_serie,
+            label: "Número de Serie",
+            input_html: {
+              class: "form-control text-uppercase"
+            } %>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="card-footer bg-light d-flex justify-content-between align-items-center p-3">
+
+      <%= link_to maquinarias_path,
+          class: "btn btn-outline-secondary" do %>
+
+        <i class="bi bi-arrow-left"></i>
+        Regresar
+
+      <% end %>
+
+      <%= f.button :submit,
+        (@maquinaria.new_record? ? "Guardar Maquinaria" : "Actualizar Maquinaria"),
+        class: "btn btn-primary px-4" %>
+
+    </div>
+
+  </div>
+
+<% end %>

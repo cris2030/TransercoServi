@@ -1,10 +1,24 @@
 Rails.application.routes.draw do
+  resources :servicio_maquinarias
+  
+  resources :asignacion_maquinaria_metas
+  resources :maquinarias
   resources :meta_notificaciones
   resources :unidades
   resources :metas
   resources :servicios
   resources :asignacion_metas
-  
+
+
+  resources :control_servicio_maquinarias,
+            only: [:index] do
+
+    collection do
+      post :actualizar
+    end
+
+  end
+
   resources :control_servicios do
     collection do
       post :enviar_notificaciones

@@ -1,0 +1,160 @@
+<%= simple_form_for(@servicio_maquinaria) do |f| %>
+
+  <%= hidden_field_tag :return_to, @return_to %>
+
+  <div class="card shadow-sm border-0 rounded-4">
+
+    <!-- HEADER -->
+
+    <div class="card-header bg-dark text-white py-3 rounded-top-4">
+
+      <h4 class="mb-0">
+
+        <i class="bi bi-tools me-2"></i>
+
+        Registro de Servicio de Maquinaria
+
+      </h4>
+
+    </div>
+
+
+    <!-- BODY -->
+
+    <div class="card-body p-4">
+
+      <%= f.error_notification %>
+
+      <% if f.object.errors[:base].present? %>
+
+        <div class="alert alert-danger">
+
+          <i class="bi bi-exclamation-triangle-fill me-2"></i>
+
+          <%= f.object.errors[:base].to_sentence %>
+
+        </div>
+
+      <% end %>
+
+
+      <!-- INFORMACIÓN DE LA MAQUINARIA -->
+
+      <div class="card border-0 bg-light mb-4">
+
+        <div class="card-body">
+
+          <h6 class="text-primary fw-bold mb-3">
+
+            <i class="bi bi-tools"></i>
+
+            Información de la Maquinaria
+
+          </h6>
+
+
+          <div class="row">
+
+            <div class="col-md-6">
+
+              <%= f.association :maquinaria,
+
+                    label: "Maquinaria",
+
+                    input_html: {
+                      class: "form-select"
+                    } %>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- DATOS DEL SERVICIO -->
+
+      <div class="card border-0 bg-light">
+
+        <div class="card-body">
+
+          <h6 class="text-success fw-bold mb-3">
+
+            <i class="bi bi-wrench-adjustable-circle"></i>
+
+            Datos del Servicio
+
+          </h6>
+
+
+          <div class="row">
+
+            <div class="col-md-6">
+
+              <%= f.input :fecha,
+
+                    as: :string,
+
+                    label: "Fecha del Servicio",
+
+                    input_html: {
+                      type: "date",
+                      class: "form-control"
+                    } %>
+
+            </div>
+
+
+            <div class="col-md-6">
+
+              <%= f.input :hora,
+
+                    label: "Hora del Servicio",
+
+                    input_html: {
+                      type: "time",
+                      class: "form-control"
+                    } %>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- FOOTER -->
+
+    <div class="card-footer bg-light d-flex justify-content-between">
+
+      <%= link_to(
+            @return_to.presence || servicio_maquinarias_path,
+            class: "btn btn-outline-secondary"
+          ) do %>
+
+        <i class="bi bi-arrow-left"></i>
+
+        Regresar
+
+      <% end %>
+
+
+      <%= f.button :submit,
+
+            (@servicio_maquinaria.new_record? ?
+              "Guardar Servicio" :
+              "Actualizar Servicio"),
+
+            class: "btn btn-primary px-4" %>
+
+    </div>
+
+  </div>
+
+<% end %>

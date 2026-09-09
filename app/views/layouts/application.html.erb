@@ -55,6 +55,11 @@
               <%= link_to "Servicios", control_servicios_path, class: "nav-link" %>
             </li>
 
+            <li class="nav-item">
+              <%= link_to "Maquinaria", control_servicio_maquinarias_path, class: "nav-link" %>
+            </li>
+            
+
           </ul>
 
           <!-- RIGHT MENU -->
@@ -69,7 +74,7 @@
                 data-bs-toggle="dropdown"
                 onclick="return false;">
 
-                ⚙️ Ajustes
+                ⚙️ Unidades
               </a>
 
               <ul class="dropdown-menu dropdown-menu-end shadow-sm">
@@ -93,6 +98,36 @@
                 <li>
                   <%= link_to "Notificaciones", meta_notificaciones_path, class: "dropdown-item" %>
                 </li> -->
+
+              </ul>
+            </li>
+
+
+                        <!-- AJUSTES DROPDOWN -->
+            <li class="nav-item dropdown">
+
+              <a class="nav-link dropdown-toggle"
+                href="#"
+                role="button"
+                data-bs-toggle="dropdown"
+                onclick="return false;">
+
+                ⚙️ Maquinaria
+              </a>
+
+              <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+
+                <li>
+                  <%= link_to "Maquinaria", maquinarias_path, class: "dropdown-item" %>
+                </li>
+
+                <li>
+                  <%= link_to "Asignación de Metas Maquinaria ", asignacion_maquinaria_metas_path, class: "dropdown-item" %>
+                </li>
+
+                <li>
+                  <%= link_to "Servicios Maquinaria", servicio_maquinarias_path, class: "dropdown-item" %>
+                </li>
 
               </ul>
             </li>

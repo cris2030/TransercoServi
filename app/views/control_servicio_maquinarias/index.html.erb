@@ -1,0 +1,658 @@
+<% content_for :title, "Control Servicios Maquinaria" %>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+
+  <h2 class="fw-semibold mb-0">
+    Control Servicios Maquinaria
+  </h2>
+
+</div>
+
+<div class="d-flex gap-2 mb-3 align-items-center">
+
+  <div class="input-group">
+
+    <span class="input-group-text">
+      <i class="bi bi-search"></i>
+    </span>
+
+    <input type="text"
+           id="buscador-maquinaria"
+           class="form-control"
+           placeholder="Buscar maquinaria...">
+
+  </div>
+
+  <%= button_to "Actualizar",
+                actualizar_control_servicio_maquinarias_path,
+                method: :post,
+                class: "btn btn-primary" %>
+
+</div>
+
+<div class="tabla-control-servicio-maquinarias">
+
+  <div class="table-responsive">
+
+    <table class="table table-bordered table-hover align-middle">
+
+      <thead class="table-dark sticky-header">
+
+        <tr>
+
+          <th onclick="sortTableMaquinaria(0)"
+              style="cursor:pointer;">
+            Maquinaria
+          </th>
+
+          <th onclick="sortTableMaquinaria(1)"
+              style="cursor:pointer;">
+            Último Servicio
+          </th>
+
+          <th onclick="sortTableMaquinaria(2)"
+              style="cursor:pointer;">
+            Días Transcurridos
+          </th>
+
+          <th onclick="sortTableMaquinaria(3)"
+              style="cursor:pointer;">
+            Meta de Días
+          </th>
+
+          <th onclick="sortTableMaquinaria(4)"
+              style="cursor:pointer;">
+            Días Restantes
+          </th>
+
+          <th>
+            Estado
+          </th>
+
+          <th>
+            Acciones
+          </th>
+
+        </tr>
+
+      </thead>
+
+      <tbody>
+
+        <% @control_servicio_maquinarias.each do |fila| %>
+
+          <%
+            estado = fila[:estado]
+            meta = fila[:meta_actual]
+
+            color_fila =
+              case estado
+
+              when :urgente
+                "#f8d7da"
+
+              when :alerta
+                "#fff3cd"
+
+              when :cumplido
+
+                case meta&.color
+
+                when "red"
+                  "#f8d7da"
+
+                when "yellow"
+                  "#fff3cd"
+
+                when "green"
+                  "#d1e7dd"
+
+                when "orange"
+                  "#ffe5b4"
+
+                when "purple"
+                  "#e2d9f3"
+
+                else
+                  "#d1e7dd"
+
+                end
+
+              else
+                ""
+
+              end
+          %>
+
+          <tr style="background-color:<%= color_fila %>">
+
+            <!-- MAQUINARIA -->
+
+            <td>
+
+              <strong class="text-primary">
+                <%= fila[:maquinaria].codigo %>
+              </strong>
+
+              <br>
+
+              <small class="text-muted">
+                <%= fila[:maquinaria].nombre %>
+              </small>
+
+            </td>
+
+
+            <!-- ÚLTIMO SERVICIO -->
+
+            <td>
+
+              <% if fila[:ultimo_servicio].present? %>
+
+                <%= link_to servicio_maquinaria_path(
+                      fila[:ultimo_servicio]
+                    ),
+                    class: "text-decoration-none" do %>
+
+                  <strong>
+                    <%= fila[:fecha_ultimo_servicio].strftime("%d/%m/%Y") %>
+                  </strong>
+
+                  <% if fila[:hora_ultimo_servicio].present? %>
+
+                    <br>
+
+                    <small class="text-muted">
+                      <i class="bi bi-clock"></i>
+                      <%= fila[:hora_ultimo_servicio].strftime("%H:%M") %>
+                    </small>
+
+                  <% end %>
+
+                <% end %>
+
+              <% else %>
+
+                <span class="text-muted">
+                  Sin servicio registrado
+                </span>
+
+              <% end %>
+
+            </td>
+
+
+            <!-- DÍAS TRANSCURRIDOS -->
+
+            <td>
+
+              <% if fila[:dias_recorridos].present? %>
+
+                <span class="badge bg-dark fs-6">
+
+                  <%= fila[:dias_recorridos] %>
+
+                  <%= fila[:dias_recorridos] == 1 ? "día" : "días" %>
+
+                </span>
+
+              <% else %>
+
+                <span class="badge bg-secondary">
+                  Sin datos
+                </span>
+
+              <% end %>
+
+            </td>
+
+
+            <!-- META DE DÍAS -->
+
+            <td>
+
+              <% if meta.present? %>
+
+                <span class="badge"
+                      style="background-color:<%= meta.color %>; color:white;">
+
+                  <%= meta.nombre %>
+
+                </span>
+
+                <small class="d-block text-muted mt-1">
+
+                  Meta:
+
+                  <strong>
+                    <%= meta.cantidad_meta_dias %>
+                  </strong>
+
+                  <%= meta.cantidad_meta_dias == 1 ? "día" : "días" %>
+
+                </small>
+
+              <% else %>
+
+                <span class="badge bg-secondary">
+                  Sin Meta
+                </span>
+
+              <% end %>
+
+            </td>
+
+
+            <!-- DÍAS RESTANTES -->
+
+            <td>
+
+              <% if fila[:dias_restantes].present? %>
+
+                <% if fila[:dias_restantes] > 0 %>
+
+                  <span class="badge bg-success fs-6">
+
+                    <i class="bi bi-hourglass-split"></i>
+
+                    Faltan
+                    <%= fila[:dias_restantes] %>
+
+                    <%= fila[:dias_restantes] == 1 ? "día" : "días" %>
+
+                  </span>
+
+                <% elsif fila[:dias_restantes] == 0 %>
+
+                  <span class="badge bg-warning text-dark fs-6">
+
+                    <i class="bi bi-exclamation-circle"></i>
+
+                    Hoy
+
+                  </span>
+
+                <% else %>
+
+                  <span class="badge bg-danger fs-6">
+
+                    <i class="bi bi-exclamation-triangle"></i>
+
+                    Superado por
+                    <%= fila[:dias_restantes].abs %>
+
+                    <%= fila[:dias_restantes].abs == 1 ? "día" : "días" %>
+
+                  </span>
+
+                <% end %>
+
+              <% else %>
+
+                <span class="text-muted">
+                  -
+                </span>
+
+              <% end %>
+
+            </td>
+
+
+            <!-- ESTADO -->
+
+            <td>
+
+              <% if fila[:estado] == :urgente %>
+
+                <span class="badge bg-danger fs-6">
+
+                  <i class="bi bi-exclamation-octagon-fill"></i>
+
+                  URGENTE
+
+                </span>
+
+              <% elsif fila[:estado] == :alerta %>
+
+                <span class="badge bg-warning text-dark fs-6">
+
+                  <i class="bi bi-bell-fill"></i>
+
+                  ALERTA
+
+                </span>
+
+              <% elsif fila[:estado] == :cumplido %>
+
+                <span class="badge fs-6"
+                      style="
+                        background-color:<%= fila[:meta_actual]&.color || 'green' %>;
+                        color:white;
+                      ">
+
+                  <i class="bi bi-check-circle-fill"></i>
+
+                  CUMPLIDO
+
+                </span>
+
+              <% else %>
+
+                <span class="badge bg-secondary">
+                  SIN DATOS
+                </span>
+
+              <% end %>
+
+            </td>
+
+
+            <!-- ACCIONES -->
+
+            <td>
+
+              <%= link_to new_servicio_maquinaria_path(
+                    maquinaria_id: fila[:maquinaria].id,
+                    return_to: request.fullpath
+                  ),
+                  class: "btn btn-primary btn-sm" do %>
+
+                <i class="bi bi-wrench-adjustable"></i>
+
+                Registrar Servicio
+
+              <% end %>
+
+            </td>
+
+          </tr>
+
+        <% end %>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>
+
+
+<script>
+
+function inicializarBuscadorMaquinaria() {
+
+  const input =
+    document.getElementById("buscador-maquinaria");
+
+  if (!input) return;
+
+  input.addEventListener("input", function () {
+
+    const valor =
+      this.value.toLowerCase().trim();
+
+    document
+      .querySelectorAll(
+        ".tabla-control-servicio-maquinarias tbody tr"
+      )
+      .forEach(fila => {
+
+        const texto =
+          fila.textContent.toLowerCase();
+
+        fila.style.display =
+          texto.includes(valor)
+            ? ""
+            : "none";
+
+      });
+
+  });
+
+}
+
+document.addEventListener(
+  "turbo:load",
+  inicializarBuscadorMaquinaria
+);
+
+</script>
+
+
+<script>
+
+let sortDirectionMaquinaria = {};
+
+function sortTableMaquinaria(columnIndex) {
+
+  const table =
+    document.querySelector(
+      ".tabla-control-servicio-maquinarias table"
+    );
+
+  if (!table) return;
+
+  const tbody =
+    table.querySelector("tbody");
+
+  const rows =
+    Array.from(
+      tbody.querySelectorAll("tr")
+    );
+
+  const asc =
+    !sortDirectionMaquinaria[columnIndex];
+
+  sortDirectionMaquinaria[columnIndex] =
+    asc;
+
+  rows.sort((a, b) => {
+
+    const cellA =
+      a.children[columnIndex]
+       .innerText
+       .trim();
+
+    const cellB =
+      b.children[columnIndex]
+       .innerText
+       .trim();
+
+
+    // ==========================================
+    // ÚLTIMO SERVICIO
+    // ==========================================
+
+    if (columnIndex === 1) {
+
+      const partesA =
+        cellA.match(
+          /(\d{2})\/(\d{2})\/(\d{4})/
+        );
+
+      const partesB =
+        cellB.match(
+          /(\d{2})\/(\d{2})\/(\d{4})/
+        );
+
+      const fechaA =
+        partesA
+          ? new Date(
+              partesA[3],
+              partesA[2] - 1,
+              partesA[1]
+            )
+          : new Date(0);
+
+      const fechaB =
+        partesB
+          ? new Date(
+              partesB[3],
+              partesB[2] - 1,
+              partesB[1]
+            )
+          : new Date(0);
+
+      return asc
+        ? fechaA - fechaB
+        : fechaB - fechaA;
+
+    }
+
+
+    // ==========================================
+    // DÍAS TRANSCURRIDOS
+    // ==========================================
+
+    if (columnIndex === 2) {
+
+      const numeroA =
+        parseInt(
+          cellA.replace(/[^0-9-]/g, "")
+        );
+
+      const numeroB =
+        parseInt(
+          cellB.replace(/[^0-9-]/g, "")
+        );
+
+      const valorA =
+        isNaN(numeroA)
+          ? 0
+          : numeroA;
+
+      const valorB =
+        isNaN(numeroB)
+          ? 0
+          : numeroB;
+
+      return asc
+        ? valorA - valorB
+        : valorB - valorA;
+
+    }
+
+
+    // ==========================================
+    // META DE DÍAS
+    // ==========================================
+
+    if (columnIndex === 3) {
+
+      const extraerDias = texto => {
+
+        const coincidencia =
+          texto.match(/Meta:\s*(\d+)/);
+
+        return coincidencia
+          ? parseInt(coincidencia[1])
+          : 0;
+
+      };
+
+      const diasA =
+        extraerDias(cellA);
+
+      const diasB =
+        extraerDias(cellB);
+
+      return asc
+        ? diasA - diasB
+        : diasB - diasA;
+
+    }
+
+
+    // ==========================================
+    // DÍAS RESTANTES
+    // ==========================================
+
+    if (columnIndex === 4) {
+
+      const extraerDias = texto => {
+
+        const superado =
+          texto.match(
+            /Superado por\s*(\d+)/
+          );
+
+        if (superado) {
+
+          return -parseInt(
+            superado[1]
+          );
+
+        }
+
+        const faltan =
+          texto.match(
+            /Faltan\s*(\d+)/
+          );
+
+        if (faltan) {
+
+          return parseInt(
+            faltan[1]
+          );
+
+        }
+
+        if (
+          texto
+            .toLowerCase()
+            .includes("hoy")
+        ) {
+
+          return 0;
+
+        }
+
+        return 0;
+
+      };
+
+      const diasA =
+        extraerDias(cellA);
+
+      const diasB =
+        extraerDias(cellB);
+
+      return asc
+        ? diasA - diasB
+        : diasB - diasA;
+
+    }
+
+
+    // ==========================================
+    // TEXTO
+    // ==========================================
+
+    return asc
+      ? cellA.localeCompare(
+          cellB,
+          undefined,
+          {
+            numeric: true,
+            sensitivity: "base"
+          }
+        )
+      : cellB.localeCompare(
+          cellA,
+          undefined,
+          {
+            numeric: true,
+            sensitivity: "base"
+          }
+        );
+
+  });
+
+  rows.forEach(row => {
+    tbody.appendChild(row);
+  });
+
+}
+
+</script>

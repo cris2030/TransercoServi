@@ -10,9 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_07_27_214918) do
+ActiveRecord::Schema[7.2].define(version: 2026_09_09_225250) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "asignacion_maquinaria_metas", force: :cascade do |t|
+    t.bigint "maquinaria_id", null: false
+    t.bigint "meta_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["maquinaria_id"], name: "index_asignacion_maquinaria_metas_on_maquinaria_id"
+    t.index ["meta_id"], name: "index_asignacion_maquinaria_metas_on_meta_id"
+  end
 
   create_table "asignacion_metas", force: :cascade do |t|
     t.bigint "unidad_id", null: false
@@ -31,6 +40,14 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_27_214918) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["gps_id"], name: "index_cymsas_on_gps_id", unique: true
+  end
+
+  create_table "maquinarias", force: :cascade do |t|
+    t.string "nombre"
+    t.string "codigo"
+    t.string "numero_serie"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "meta", force: :cascade do |t|
@@ -64,6 +81,9 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_27_214918) do
     t.integer "cantidad_meta_horas"
     t.integer "alerta_horas"
     t.integer "urgente_horas"
+    t.integer "cantidad_meta_dias"
+    t.integer "alerta_dias"
+    t.integer "urgente_dias"
   end
 
   create_table "metas_unidads", force: :cascade do |t|
@@ -84,6 +104,15 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_27_214918) do
     t.integer "target_odometer"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "servicio_maquinarias", force: :cascade do |t|
+    t.bigint "maquinaria_id", null: false
+    t.date "fecha"
+    t.time "hora"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["maquinaria_id"], name: "index_servicio_maquinarias_on_maquinaria_id"
   end
 
   create_table "servicios", force: :cascade do |t|
@@ -122,10 +151,13 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_27_214918) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "asignacion_maquinaria_metas", "maquinarias"
+  add_foreign_key "asignacion_maquinaria_metas", "metas"
   add_foreign_key "asignacion_metas", "metas"
   add_foreign_key "asignacion_metas", "unidades"
   add_foreign_key "meta_notificaciones", "metas"
   add_foreign_key "meta_notificaciones", "users"
   add_foreign_key "metas_unidads", "meta"
+  add_foreign_key "servicio_maquinarias", "maquinarias"
   add_foreign_key "servicios", "unidades"
 end

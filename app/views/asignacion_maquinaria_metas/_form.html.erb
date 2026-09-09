@@ -1,0 +1,295 @@
+<%= simple_form_for(
+      @asignacion_maquinaria_meta,
+      url: asignacion_maquinaria_meta_path(@meta),
+      method: :patch
+    ) do |f| %>
+
+  <div class="card shadow-sm border-0 rounded-4">
+
+    <!-- HEADER -->
+
+    <div class="card-header bg-dark text-white py-3 rounded-top-4">
+
+      <h4 class="mb-0">
+
+        <i class="bi bi-tools me-2"></i>
+
+        Asignación de Metas a Maquinarias
+
+      </h4>
+
+    </div>
+
+    <!-- BODY -->
+
+    <div class="card-body p-4">
+
+      <%= f.error_notification %>
+
+      <% if flash[:alert] %>
+
+        <div class="alert alert-danger">
+
+          <i class="bi bi-exclamation-triangle-fill me-2"></i>
+
+          <%= flash[:alert] %>
+
+        </div>
+
+      <% end %>
+
+      <!-- META -->
+
+      <div class="row mb-4">
+
+        <div class="col-lg-6">
+
+          <%= f.input :meta_id,
+
+            collection: Meta.order(:nombre).map { |m|
+              [
+                "#{m.nombre} (cada #{m.cantidad_meta} km)",
+                m.id
+              ]
+            },
+
+            label: "Meta a Asignar",
+
+            prompt: "Seleccione una meta",
+
+            input_html: {
+              class: "form-select"
+            } %>
+
+        </div>
+
+      </div>
+
+      <hr>
+
+      <!-- BARRA SUPERIOR -->
+
+      <div class="row align-items-center mb-3">
+
+        <div class="col-md-4">
+
+          <div class="form-check form-switch">
+
+            <input type="checkbox"
+                   id="seleccionar_todas_maquinarias"
+                   class="form-check-input">
+
+            <label for="seleccionar_todas_maquinarias"
+                   class="form-check-label fw-semibold">
+
+              Seleccionar todas las maquinarias
+
+            </label>
+
+          </div>
+
+        </div>
+
+        <div class="col-md-8">
+
+          <div class="input-group">
+
+            <span class="input-group-text">
+
+              <i class="bi bi-search"></i>
+
+            </span>
+
+            <input type="text"
+                   id="buscar_maquinaria"
+                   class="form-control"
+                   placeholder="Buscar por nombre, código o número de serie...">
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- LISTA -->
+
+      <div class="card border">
+
+        <div class="card-header bg-light">
+
+          <strong>
+
+            <i class="bi bi-tools me-2"></i>
+
+            Maquinarias Disponibles
+
+          </strong>
+
+        </div>
+
+        <div id="lista_maquinarias"
+             class="card-body p-0"
+             style="max-height:500px;overflow-y:auto;">
+
+          <% Maquinaria.order(:codigo).each do |maquinaria| %>
+
+            <% marcada =
+              defined?(@meta) ?
+              @meta.maquinaria_ids.include?(maquinaria.id) :
+              false %>
+
+            <div class="maquinaria-item border-bottom p-3 hover-row">
+
+              <div class="form-check">
+
+                <%= check_box_tag(
+                  "maquinaria_ids[]",
+                  maquinaria.id,
+                  marcada,
+                  class: "form-check-input maquinaria-checkbox",
+                  id: "maquinaria_#{maquinaria.id}"
+                ) %>
+
+                <%= label_tag(
+                  "maquinaria_#{maquinaria.id}",
+                  nil,
+                  class: "form-check-label w-100"
+                ) do %>
+
+                  <div class="d-flex justify-content-between align-items-center">
+
+                    <div>
+
+                      <strong class="text-primary">
+
+                        <%= maquinaria.codigo %>
+
+                      </strong>
+
+                      <div class="text-muted small">
+
+                        <%= maquinaria.nombre %>
+
+                      </div>
+
+                    </div>
+
+                    <div>
+
+                      <span class="badge bg-secondary">
+
+                        <%= maquinaria.numero_serie %>
+
+                      </span>
+
+                    </div>
+
+                  </div>
+
+                <% end %>
+
+              </div>
+
+            </div>
+
+          <% end %>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- FOOTER -->
+
+    <div class="card-footer bg-light d-flex justify-content-between">
+
+      <%= link_to asignacion_maquinaria_metas_path,
+          class: "btn btn-outline-secondary" do %>
+
+        <i class="bi bi-arrow-left"></i>
+
+        Regresar
+
+      <% end %>
+
+      <%= f.button :submit,
+          "Guardar Asignación",
+          class: "btn btn-info px-4 text-white" %>
+
+    </div>
+
+  </div>
+
+<% end %>
+
+
+<script>
+
+document.addEventListener("turbo:load", () => {
+
+  const buscador =
+    document.getElementById("buscar_maquinaria");
+
+  const seleccionarTodas =
+    document.getElementById(
+      "seleccionar_todas_maquinarias"
+    );
+
+
+  /*
+   * BUSCADOR
+   */
+
+  if (buscador) {
+
+    buscador.addEventListener("input", function() {
+
+      const texto =
+        this.value.toLowerCase();
+
+      document
+        .querySelectorAll(".maquinaria-item")
+        .forEach(item => {
+
+          const contenido =
+            item.textContent.toLowerCase();
+
+          item.style.display =
+            contenido.includes(texto)
+              ? ""
+              : "none";
+
+        });
+
+    });
+
+  }
+
+
+  /*
+   * SELECCIONAR TODAS
+   */
+
+  if (seleccionarTodas) {
+
+    seleccionarTodas.addEventListener(
+      "change",
+      function() {
+
+        document
+          .querySelectorAll(".maquinaria-checkbox")
+          .forEach(check => {
+
+            check.checked = this.checked;
+
+          });
+
+      }
+    );
+
+  }
+
+});
+
+</script>

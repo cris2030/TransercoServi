@@ -15,6 +15,7 @@
    inflect.irregular "metanotificacion", "metanotificaciones"
    inflect.irregular "MetaNotificacion", "MetaNotificaciones"
    inflect.irregular "meta_notificacion", "meta_notificaciones"
+   inflect.irregular "maquinaria", "maquinarias"
 
 #   inflect.uncountable %w( fish sheep )
  end

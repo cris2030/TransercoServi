@@ -74,6 +74,7 @@ class MetasController < ApplicationController
     def meta_params
       params.require(:meta).permit(
         :nombre,
+
         :cantidad_meta,
         :alerta_km,
         :urgente_km,
@@ -81,6 +82,10 @@ class MetasController < ApplicationController
         :cantidad_meta_horas,
         :alerta_horas,
         :urgente_horas,
+
+        :cantidad_meta_dias,
+        :alerta_dias,
+        :urgente_dias,
 
         :color,
 
@@ -92,4 +97,6 @@ class MetasController < ApplicationController
         ]
       )
     end
+
+
 end

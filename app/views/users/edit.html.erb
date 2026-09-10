@@ -1,0 +1,41 @@
+<h1>Editar usuario</h1>
+
+<%= form_with model: @user do |form| %>
+
+  <% if @user.errors.any? %>
+    <div>
+      <h2>
+        <%= pluralize(@user.errors.count, "error") %>
+        impidieron guardar el usuario:
+      </h2>
+
+      <ul>
+        <% @user.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :email, "Correo electrónico" %>
+    <%= form.email_field :email %>
+  </div>
+
+  <div>
+    <%= form.label :password, "Nueva contraseña" %>
+    <%= form.password_field :password %>
+  </div>
+
+  <div>
+    <%= form.label :password_confirmation, "Confirmar contraseña" %>
+    <%= form.password_field :password_confirmation %>
+  </div>
+
+  <div>
+    <%= form.submit "Guardar cambios" %>
+  </div>
+
+<% end %>
+
+<%= link_to "Volver", users_path %>

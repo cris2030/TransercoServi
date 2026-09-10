@@ -1,7 +1,6 @@
 Rails.application.routes.draw do
   get "users/index"
   get "users/edit"
-  devise_for :users
 
   resources :users, only: [:index, :edit, :update, :destroy]
   resources :servicio_maquinarias
